@@ -26,6 +26,7 @@
         }
         .game-text {
             margin-bottom: 20px;
+            white-space: pre-wrap; /* Ensure newline characters (\n) are respected */
         }
         .button-container {
             display: flex;
@@ -120,63 +121,20 @@
 
     <script>
         // Initial game state
-        // Define player and enemy objects
         var player = {
             name: "Player",
             health: 100,
-            strength: 10
+            strength: 10,
+            inventory: []
         };
 
-        var enemy = {
-            name: "Enemy",
-            health: 80,
-            strength: 8
-        };
-
-        
         var enemies = [
-    { name: "Goblin", level: 1, health: 30, strength: 5, drops: ["Gold", "Health Potion"] },
-    { name: "Orc", level: 2, health: 50, strength: 8, drops: ["Gold", "Armor"] },
-    { name: "Dragon", level: 5, health: 100, strength: 15, drops: ["Gold", "Dragon Scale"] },
-    { name: "Skeleton", level: 6, health: 35, strength: 6, drops: ["Gold", "Bone"] },
-    { name: "Troll", level: 7, health: 40, strength: 7, drops: ["Gold", "Club"] },
-    { name: "Witch", level: 8, health: 45, strength: 8, drops: ["Gold", "Spellbook"] },
-    { name: "Bandit", level: 10, health: 50, strength: 10, drops: ["Gold", "Dagger"] },
-    { name: "Giant Spider", level: 12, health: 60, strength: 12, drops: ["Gold", "Spider Silk"] },
-    { name: "Zombie", level: 15, health: 70, strength: 14, drops: ["Gold", "Rotten Flesh"] },
-    { name: "Werewolf", level: 18, health: 80, strength: 16, drops: ["Gold", "Werewolf Fur"] },
-    { name: "Ghost", level: 20, health: 90, strength: 18, drops: ["Gold", "Ectoplasm"] },
-    { name: "Minotaur", level: 22, health: 100, strength: 20, drops: ["Gold", "Minotaur Horn"] },
-    { name: "Vampire", level: 25, health: 110, strength: 22, drops: ["Gold", "Vampire Fang"] },
-    { name: "Specter", level: 28, health: 120, strength: 24, drops: ["Gold", "Phantasmal Essence"] },
-    { name: "Hydra", level: 30, health: 130, strength: 26, drops: ["Gold", "Hydra Scale"] },
-    { name: "Demon", level: 32, health: 140, strength: 28, drops: ["Gold", "Demon Horn"] },
-    { name: "Griffin", level: 35, health: 150, strength: 30, drops: ["Gold", "Griffin Feather"] },
-    { name: "Basilisk", level: 40, health: 160, strength: 32, drops: ["Gold", "Basilisk Scale"] },
-    { name: "Phoenix", level: 45, health: 170, strength: 34, drops: ["Gold", "Phoenix Feather"] },
-    { name: "Dwarf King", level: 50, health: 180, strength: 36, drops: ["Gold", "Dwarven Crown"] },
-    { name: "Yeti", level: 55, health: 190, strength: 38, drops: ["Gold", "Yeti Fur"] },
-    { name: "Medusa", level: 60, health: 200, strength: 40, drops: ["Gold", "Medusa Gaze"] },
-    { name: "Lich", level: 65, health: 210, strength: 42, drops: ["Gold", "Lich Crown"] },
-    { name: "Cyclops", level: 70, health: 220, strength: 44, drops: ["Gold", "Cyclops Eye"] },
-    { name: "Kraken", level: 75, health: 230, strength: 46, drops: ["Gold", "Kraken Tentacle"] },
-    { name: "Behemoth", level: 80, health: 240, strength: 48, drops: ["Gold", "Behemoth Hide"] },
-    { name: "Chimera", level: 85, health: 250, strength: 50, drops: ["Gold", "Chimera Claw"] },
-    { name: "Titan", level: 90, health: 260, strength: 52, drops: ["Gold", "Titanium Ore"] },
-    { name: "Dragon Turtle", level: 95, health: 270, strength: 54, drops: ["Gold", "Dragon Turtle Shell"] },
-    { name: "Banshee", level: 100, health: 280, strength: 56, drops: ["Gold", "Banshee Wail"] },
-    { name: "Golem", level: 105, health: 290, strength: 58, drops: ["Gold", "Golem Core"] },
-    { name: "Sphinx", level: 110, health: 300, strength: 60, drops: ["Gold", "Sphinx Riddle"] },
-    { name: "Jormungandr", level: 115, health: 310, strength: 62, drops: ["Gold", "Jormungandr Fang"] },
-    { name: "Phoenix King", level: 120, health: 320, strength: 64, drops: ["Gold", "Phoenix King Feather"] },
-    { name: "Leviathan", level: 125, health: 330, strength: 66, drops: ["Gold", "Leviathan Scale"] },
-    { name: "Colossus", level: 130, health: 340, strength: 68, drops: ["Gold", "Colossus Heart"] },
-    { name: "Balrog", level: 135, health: 350, strength: 70, drops: ["Gold", "Balrog Flame"] },
-    { name: "Elder Dragon", level: 140, health: 360, strength: 72, drops: ["Gold", "Elder Dragon Scale"] },
-    { name: "Death Knight", level: 145, health: 370, strength: 74, drops: ["Gold", "Death Knight Sword"] },
-    { name: "Ancient Wyvern", level: 150, health: 380, strength: 76, drops: ["Gold", "Ancient Wyvern Fang"] }
-];
-
+            { name: "Goblin", level: 1, health: 30, strength: 5, drops: ["Gold", "Health Potion"] },
+            { name: "Orc", level: 2, health: 50, strength: 8, drops: ["Gold", "Armor"] },
+            { name: "Dragon", level: 5, health: 100, strength: 15, drops: ["Gold", "Dragon Scale"] },
+            { name: "Skeleton", level: 6, health: 35, strength: 6, drops: ["Gold", "Bone"] },
+            // Add more enemies as needed
+        ];
 
         function explore() {
             var gameText = document.getElementById("gameText");
@@ -197,16 +155,22 @@
             var enemy = getRandomEnemy();
             gameText.textContent = "You encounter a " + enemy.name + " (Level " + enemy.level + ")!\n";
 
-            // Simulate combat
+            // Simulate turn-based combat
+            var isPlayerTurn = true;
             while (player.health > 0 && enemy.health > 0) {
-                var playerDamage = Math.floor(Math.random() * player.strength) + 1;
-                var enemyDamage = Math.floor(Math.random() * enemy.strength) + 1;
+                if (isPlayerTurn) {
+                    // Player's turn
+                    var playerDamage = Math.floor(Math.random() * player.strength) + 1;
+                    enemy.health -= playerDamage;
+                    gameText.textContent += "You deal " + playerDamage + " damage to the " + enemy.name + ".\n";
+                } else {
+                    // Enemy's turn
+                    var enemyDamage = Math.floor(Math.random() * enemy.strength) + 1;
+                    player.health -= enemyDamage;
+                    gameText.textContent += "The " + enemy.name + " deals " + enemyDamage + " damage to you.\n";
+                }
 
-                enemy.health -= playerDamage;
-                player.health -= enemyDamage;
-
-                gameText.textContent += "You deal " + playerDamage + " damage to the " + enemy.name + ".\n";
-                gameText.textContent += "The " + enemy.name + " deals " + enemyDamage + " damage to you.\n";
+                isPlayerTurn = !isPlayerTurn;
             }
 
             // Check outcome of the fight
@@ -214,7 +178,7 @@
                 gameText.textContent += "You were defeated by the " + enemy.name + ". Game Over!";
                 // Handle game over scenario
             } else {
-                gameText.textContent += "You defeated the " + enemy.name + "!";
+                gameText.textContent += "You defeated the " + enemy.name + "!\n";
 
                 // Gain drops from enemy
                 enemy.drops.forEach(function(drop) {
