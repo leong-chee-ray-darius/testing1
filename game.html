@@ -215,6 +215,10 @@
                     <th>Defense</th>
                     <td id="defense">5</td>
                 </tr>
+                <tr>
+                    <th>Gold</th>
+                    <td id="gold">0</td>
+                </tr>
                 <!-- Add more stats as needed -->
             </table>
         </div>
@@ -264,27 +268,25 @@
             <button onclick="useShield()">Use Shield</button>
             <!-- Add more defense buttons as needed -->
         </div>
+        <div class="settings-menu" id="settingsMenu">
+            <strong>Settings:</strong>
+            <div>
+                <label><input type="checkbox" id="soundCheckbox"> Sound</label>
+            </div>
+            <div>
+                <label>Text Size:
+                    <select id="textSizeSelect" onchange="changeTextSize()">
+                        <option value="normal">Normal</option>
+                        <option value="large">Large</option>
+                    </select>
+                </label>
+            </div>
+            <div>
+                <label><input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode()"> Dark Mode</label>
+            </div>
+        </div>
         <div class="save-button">
             <button onclick="saveGame()">Save Game</button>
-        </div>
-    </div>
-
-    <!-- Settings Menu -->
-    <div class="settings-menu" id="settingsMenu">
-        <strong>Settings:</strong>
-        <div>
-            <label><input type="checkbox" id="soundCheckbox"> Sound</label>
-        </div>
-        <div>
-            <label>Text Size:
-                <select id="textSizeSelect" onchange="changeTextSize()">
-                    <option value="normal">Normal</option>
-                    <option value="large">Large</option>
-                </select>
-            </label>
-        </div>
-        <div>
-            <label><input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode()"> Dark Mode</label>
         </div>
     </div>
 
@@ -296,10 +298,12 @@
             strength: 10,
             magic: 5,
             defense: 5,
+            gold: 0,
             level: 1,
             area: 1,  // Player starts in Area 1
             city: false,  // Not in city initially
-            skills: []
+            skills: [],
+            inventory: []
         };
 
         var areas = [
@@ -350,10 +354,18 @@
 
         function sellLoot() {
             updateGameText("You sell your loot in the city.");
+            // Example: Increase gold and update inventory
+            player.gold += 50; // Example value, adjust as needed
+            updateStats();
         }
 
         function buyItems() {
             updateGameText("You buy items in the city.");
+            // Example: Decrease gold and update inventory
+            player.gold -= 20; // Example value, adjust as needed
+            player.inventory.push("Potion"); // Example item, adjust as needed
+            updateStats();
+            updateInventory();
         }
 
         function learnSkills() {
@@ -387,11 +399,18 @@
         }
 
         function castSpell(spell) {
-            updateGameText("You cast the " + spell + " spell.");
+            if (player.skills.includes(spell)) {
+                updateGameText("You cast the " + spell + " spell.");
+                // Example: Modify player stats or game state based on spell
+            } else {
+                updateGameText("You don't know how to cast " + spell + " yet.");
+            }
         }
 
         function useShield() {
+            // Example: Implement shield usage
             updateGameText("You use your shield to defend.");
+            // Modify player stats or game state based on shield usage
         }
 
         function saveGame() {
@@ -424,7 +443,34 @@
             }
         }
 
+        function updateStats() {
+            document.getElementById("health").textContent = player.health;
+            document.getElementById("strength").textContent = player.strength;
+            document.getElementById("magic").textContent = player.magic;
+            document.getElementById("defense").textContent = player.defense;
+            document.getElementById("gold").textContent = player.gold;
+        }
+
+        function updateInventory() {
+            var inventoryList = document.getElementById("inventoryList");
+            inventoryList.innerHTML = ""; // Clear existing list
+
+            if (player.inventory.length === 0) {
+                var newItem = document.createElement("li");
+                newItem.textContent = "No items";
+                inventoryList.appendChild(newItem);
+            } else {
+                player.inventory.forEach(function(item) {
+                    var newItem = document.createElement("li");
+                    newItem.textContent = item;
+                    inventoryList.appendChild(newItem);
+                });
+            }
+        }
+
         // Initialize the game
+        updateStats();
+        updateInventory();
         updateGameText("Welcome to the Text RPG! Begin your adventure...");
     </script>
 </body>
