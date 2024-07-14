@@ -18,21 +18,9 @@
             justify-content: space-between;
             align-items: center;
         }
-        nav {
-            background-color: #444;
-            padding: 10px 0;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
         .search-container {
-            margin-top: 20px;
-            text-align: center;
+            display: flex;
+            align-items: center;
         }
         .search-container input[type=text] {
             padding: 10px;
@@ -51,16 +39,33 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            margin-left: 10px;
         }
         .search-container button:hover {
             background-color: #45a049;
         }
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <!-- Header and Navigation -->
+    <!-- Header with Search Bar and Navigation -->
     <header>
         <h1>Game Hub</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search games...">
+            <button onclick="searchGames()">Search</button>
+        </div>
         <nav>
             <a href="index.html">Home</a>
             <a href="game.html">Play Text Adventure</a>
@@ -68,12 +73,6 @@
             <!-- Add more links as needed -->
         </nav>
     </header>
-
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search games...">
-        <button onclick="searchGames()">Search</button>
-    </div>
 
     <div>
         <h2>Welcome to the Game Hub!</h2>
