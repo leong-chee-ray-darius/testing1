@@ -53,13 +53,14 @@
                     outputDiv.textContent = "Too high. Try again.";
                 }
 
-                guess = parseInt(prompt("Make a guess:"));
+                // Clear the input field for the next guess
+                guessInput.value = '';
 
-                if (isNaN(guess) || guess < 1 || guess > 100) {
-                    outputDiv.textContent = "Please enter a valid number between 1 and 100.";
-                    return;
+                return;
             }
 
-            attempts++;
-            }
-            correctly.textContent took
+            outputDiv.textContent = `Congratulations! You've guessed the number ${numberToGuess} correctly in ${attempts} attempts.`;
+        });
+    </script>
+</body>
+</html>
