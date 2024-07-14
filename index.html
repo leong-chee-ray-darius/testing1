@@ -57,6 +57,20 @@
             text-decoration: underline;
         }
     </style>
+    <script>
+        function searchGames() {
+            // Get the input value
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            
+            // Check if input is not empty
+            if (input !== "") {
+                // Perform search logic (dummy example)
+                alert("Searching for: " + input);
+            } else {
+                alert("Please enter a search term.");
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Header with Search Bar and Navigation -->
