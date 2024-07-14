@@ -73,8 +73,7 @@
     <header>
         <h1>Game Hub - Text Adventure Game</h1>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games...">
-            <button onclick="searchGames()">Search</button>
+            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
         </div>
     </header>
 
@@ -93,11 +92,11 @@
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
             if (input === "text adventure") {
-                // Replace this with actual logic to navigate or display relevant content
-                window.location.href = "game.html"; // Example navigation for demonstration
-            } else {
-                alert("Game not found.");
+                window.location.href = "game.html"; // Redirect to game.html
+            } else if (input === "guessing game") {
+                window.location.href = "guessing.html"; // Redirect to guessing.html
             }
+            // Add more conditions for other games as needed
         }
 
         function goPath() {
