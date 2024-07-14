@@ -13,6 +13,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .game-title {
@@ -150,6 +151,8 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     display: none; /* Initially hidden */
     z-index: 1000; /* Ensure it's above other content */
+    transition: background-color 0.3s, color 0.3s;
+    color: #333; /* Default text color */
 }
 
 .settings-menu label {
@@ -180,4 +183,13 @@ body {
 .dark-mode .settings-menu {
     background-color: #333;
     color: #fff;
+}
+
+.dark-mode .button-container button {
+    background-color: #0056b3;
+}
+
+.dark-mode .magic-menu button,
+.dark-mode .defense-menu button {
+    background-color: #495057;
 }
