@@ -89,18 +89,6 @@
         <div class="save-button">
             <button onclick="saveGame()">Save Game</button>
         </div>
-        <div class="bar">
-            <div id="playerHealthBar" class="progress" style="width: 100%;"></div>
-        </div>
-        <div class="bar">
-            <div id="playerMagicBar" class="progress" style="width: 100%;"></div>
-        </div>
-        <div class="bar">
-            <div id="enemyHealthBar" class="progress" style="width: 100%;"></div>
-        </div>
-        <div class="bar">
-            <div id="enemyMagicBar" class="progress" style="width: 100%;"></div>
-        </div>
     </div>
 
     <!-- Settings Menu -->
@@ -119,6 +107,22 @@
         </div>
         <div>
             <label><input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode()"> Dark Mode</label>
+        </div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="progress-bars">
+        <div class="bar">
+            <div id="playerHealthBar" class="progress"></div>
+        </div>
+        <div class="bar">
+            <div id="playerMagicBar" class="progress"></div>
+        </div>
+        <div class="bar">
+            <div id="enemyHealthBar" class="progress"></div>
+        </div>
+        <div class="bar">
+            <div id="enemyMagicBar" class="progress"></div>
         </div>
     </div>
 
