@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Adventure Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .game-output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .game-buttons {
+            margin-top: 10px;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .settings {
+            float: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Text Adventure Game</h1>
+        <div class="game-output" id="output">
+            Welcome to the Text Adventure Game! Click "Start" to begin.
+        </div>
+        <div class="game-buttons">
+            <button onclick="startGame()">Start</button>
+            <button onclick="saveGame()">Save</button>
+            <button onclick="loadGame()">Load</button>
+        </div>
+        <div class="settings">
+            <label for="fontSize">Font Size: </label>
+            <select id="fontSize" onchange="changeFontSize()">
+                <option value="14px">Small</option>
+                <option value="16px" selected>Medium</option>
+                <option value="18px">Large</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        var gameData = {
+            output: "",
+            savedAt: ""
+        };
+
+        function startGame() {
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "You wake up in a mysterious room. There are two doors in front of you: one red and one blue.<br>";
+            outputDiv.innerHTML += "<button onclick='chooseDoor(\"red\")'>Go through the red door</button>";
+            outputDiv.innerHTML += "<button onclick='chooseDoor(\"blue\")'>Go through the blue door</button>";
+        }
+
+        function chooseDoor(color) {
+            var outputDiv = document.getElementById('output');
+            if (color === "red") {
+                outputDiv.innerHTML = "You enter a dark forest. You hear growling noises.<br>";
+                outputDiv.innerHTML += "<button onclick='encounterBear()'>Investigate the noise</button>";
+                outputDiv.innerHTML += "<button onclick='runAway()'>Run away</button>";
+            } else if (color === "blue") {
+                outputDiv.innerHTML = "You find yourself in a brightly lit room with a treasure chest.<br>";
+                outputDiv.innerHTML += "<button onclick='openChest()'>Open the chest</button>";
+                outputDiv.innerHTML += "<button onclick='leaveRoom()'>Leave the room</button>";
+            }
+        }
+
+        function encounterBear() {
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "A bear emerges from the bushes! It looks hungry.<br>";
+            outputDiv.innerHTML += "<button onclick='fightBear()'>Fight the bear</button>";
+            outputDiv.innerHTML += "<button onclick='runAway()'>Run away</button>";
+        }
+
+        function fightBear() {
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "You wrestle with the bear, but it overpowers you. Game Over!<br>";
+            outputDiv.innerHTML += "<button onclick='location.reload()'>Try again</button>";
+        }
+
+        function runAway() {
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "You manage to escape the danger. Congratulations, you survived!<br>";
+            outputDiv.innerHTML += "<button onclick='location.reload()'>Play again</button>";
+        }
+
+        function openChest() {
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "The chest is empty! Disappointed, you leave the room.<br>";
+            outputDiv.innerHTML += "<button onclick='leaveRoom()'>Continue exploring</button>";
+        }
+
+        function leaveRoom() {
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "You exit the room and continue your journey.<br>";
+            outputDiv.innerHTML += "<button onclick='location.reload()'>Play again</button>";
+        }
+
+        function saveGame() {
+            gameData.output = document.getElementById('output').innerHTML;
+            gameData.savedAt = new Date().toLocaleString();
+            localStorage.setItem('textAdventureSave', JSON.stringify(gameData));
+            alert('Game saved successfully!');
+        }
+
+        function loadGame() {
+            var savedGame = localStorage.getItem('textAdventureSave');
+            if (savedGame) {
+                gameData = JSON.parse(savedGame);
+                document.getElementById('output').innerHTML = gameData.output;
+                alert('Game loaded successfully!');
+            } else {
+                alert('No saved game found.');
+            }
+        }
+
+        function changeFontSize() {
+            var fontSize = document.getElementById('fontSize').value;
+            document.body.style.fontSize = fontSize;
+        }
+    </script>
+</body>
+</html>
