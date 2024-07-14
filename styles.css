@@ -16,9 +16,14 @@ body, html {
 }
 
 /* Dark mode styles */
+.dark-mode body {
+    background-color: #201c1c; /* Dark background color for the entire page */
+}
+
 .dark-mode .game-container {
-    background-color: #222; /* Dark background color */
-    color: #eee; /* Light text color */
+    background-color: #201c1c; /* Dark background color */
+    color: #aeb2b5; /* Light text color */
+    border-color: #333; /* Dark border color */
 }
 
 /* Button styles */
