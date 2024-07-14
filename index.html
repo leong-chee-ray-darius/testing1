@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hub</title>
+    <title>Game Hub - Text Adventure Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,35 +44,17 @@
         .search-container button:hover {
             background-color: #45a049;
         }
-        .suggestions {
-            position: absolute;
-            background-color: #f1f1f1;
-            z-index: 998;
-            width: 30%;
-            list-style-type: none;
-            padding: 0;
-            border: 1px solid #ccc;
-            border-top: none;
-            margin-top: 0;
-            left: calc(50% - 50px); /* Center the container horizontally and move 50px to the left */
-            transform: translateX(-50%);
-            display: none;
+        .content {
+            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
+            padding: 20px;
+            text-align: center;
         }
-        .suggestions li {
-            padding: 10px;
+        .game-content {
+            padding: 20px;
             text-align: left;
-            cursor: pointer;
-            color: #000; /* Set text color to black */
         }
-        .suggestions li:hover {
-            background-color: #ddd;
-        }
-        .search-results {
-            margin-top: 20px;
-            text-align: left; /* Adjust text alignment as needed */
-        }
-        .search-results button {
-            margin: 5px;
+        .choice-button {
+            margin-top: 10px;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -81,110 +63,63 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .search-results button:hover {
+        .choice-button:hover {
             background-color: #0056b3;
-        }
-        .content {
-            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
-            padding: 20px;
-            text-align: center;
         }
     </style>
 </head>
 <body>
     <!-- Header with Search Bar -->
     <header>
-        <h1>Game Hub</h1>
+        <h1>Game Hub - Text Adventure Game</h1>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="showSuggestions()">
-            <button onclick="searchGames()">Search</button>
-            <ul id="suggestions" class="suggestions"></ul>
+            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
         </div>
     </header>
 
     <!-- Main Content -->
     <div class="content">
-        <h2>Welcome to Game Hub!</h2>
-        <p>Explore and play exciting games.</p>
+        <h2>Welcome to the Text Adventure Game!</h2>
+        <div class="game-content" id="gameContent">
+            <!-- Game starts here -->
+            <p>You wake up in a mysterious forest. A path leads deeper into the woods. What do you do?</p>
+            <button class="choice-button" onclick="goPath()">Follow the path</button>
+        </div>
     </div>
 
-    <!-- Search Results Container -->
-    <div id="searchResults" class="search-results" style="display: none;">
-        <!-- Results will be dynamically added here -->
-    </div>
-
-    <!-- JavaScript for Search Functionality -->
+    <!-- JavaScript for Search Functionality and Game Logic -->
     <script>
-        var results = [
-            { title: "Text Adventure Game", link: "https://leong-chee-ray-darius.github.io/testing1/game.html" },
-            { title: "Guessing Game", link: "https://leong-chee-ray-darius.github.io/testing1/guessing.html" },
-            { title: "My Game 3", link: "https://github.com/your-username/my-game-3" }
-            // Add more games as needed
-        ];
-
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
-            var resultsContainer = document.getElementById("searchResults");
-
-            // Clear previous results
-            resultsContainer.innerHTML = "";
-
-            if (input !== "") {
-                // Filter games based on input
-                var filteredGames = results.filter(function(game) {
-                    return game.title.toLowerCase().includes(input);
-                });
-
-                // Display up to 3 results
-                var maxResults = Math.min(filteredGames.length, 3);
-                for (var i = 0; i < maxResults; i++) {
-                    var game = filteredGames[i];
-                    var button = document.createElement("button");
-                    button.textContent = game.title;
-                    button.onclick = function(url) {
-                        return function() {
-                            window.location.href = url; // Navigate to game link
-                        };
-                    }(game.link);
-                    resultsContainer.appendChild(button);
-                }
-
-                resultsContainer.style.display = "block"; // Show results container
-            } else {
-                resultsContainer.style.display = "none"; // Hide results container if no input
+            if (input === "text adventure") {
+                window.location.href = "game.html"; // Redirect to game.html
+            } else if (input === "guessing game") {
+                window.location.href = "guessing.html"; // Redirect to guessing.html
             }
+            // Add more conditions for other games as needed
         }
 
-        function showSuggestions() {
-            var input = document.getElementById("searchInput").value.toLowerCase();
-            var suggestionsContainer = document.getElementById("suggestions");
+        function goPath() {
+            var gameContent = document.getElementById("gameContent");
 
-            // Clear previous suggestions
-            suggestionsContainer.innerHTML = "";
+            // Update game content based on player's choice
+            gameContent.innerHTML = "<p>You follow the path and encounter a friendly dwarf.</p>" +
+                                    "<button class='choice-button' onclick='talkDwarf()'>Talk to the dwarf</button>";
+        }
 
-            if (input.length > 0) {
-                // Simulated suggestions (replace with actual search logic)
-                var suggestions = results.filter(function(game) {
-                    return game.title.toLowerCase().includes(input);
-                });
+        function talkDwarf() {
+            var gameContent = document.getElementById("gameContent");
 
-                // Display suggestions
-                for (var i = 0; i < suggestions.length; i++) {
-                    var suggestion = suggestions[i];
-                    var li = document.createElement("li");
-                    li.textContent = suggestion.title;
-                    li.onclick = function() {
-                        document.getElementById("searchInput").value = this.textContent;
-                        searchGames(); // Call search function when suggestion clicked
-                        suggestionsContainer.style.display = "none"; // Hide suggestions
-                    };
-                    suggestionsContainer.appendChild(li);
-                }
+            // Update game content based on player's choice
+            gameContent.innerHTML = "<p>The dwarf tells you about a hidden treasure nearby.</p>" +
+                                    "<button class='choice-button' onclick='findTreasure()'>Search for the treasure</button>";
+        }
 
-                suggestionsContainer.style.display = "block"; // Show suggestions
-            } else {
-                suggestionsContainer.style.display = "none"; // Hide suggestions if no input
-            }
+        function findTreasure() {
+            var gameContent = document.getElementById("gameContent");
+
+            // Update game content based on player's choice
+            gameContent.innerHTML = "<p>You find the treasure chest! Congratulations!</p>";
         }
     </script>
 
