@@ -37,8 +37,6 @@ body, html {
     margin-right: 10px;
     margin-bottom: 10px;
 }
-
-/* Progress bar styles */
 .progress-bars {
     margin-top: 20px;
     display: flex;
@@ -48,12 +46,10 @@ body, html {
 
 .progress {
     height: 20px;
-    background-color: #4CAF50; /* Green */
-    width: 100%; /* Default width */
-    transition: width 0.3s ease-in-out; /* Smooth width transition */
+    background-color: #4CAF50; 
+    width: 100%;
+    transition: width 0.3s ease-in-out; 
 }
-
-/* Adjust the width dynamically */
 .bar {
     width: calc(50% - 5px); /* Adjust as per your layout */
 }
@@ -61,4 +57,12 @@ body, html {
 /* Dark mode styles for progress bars */
 .dark-mode .progress {
     background-color: #8bc34a; /* Darker green */
+}
+/* Button styles */
+.button-container button,
+.settings-menu button,
+.city-options button,
+.magic-menu button,
+.defense-menu button {
+    border-radius: 10px; /* Rounded corners */
 }
