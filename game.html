@@ -74,6 +74,10 @@
         }
     </style>
     <script>
+        function startTextAdventure() {
+            window.location.href = "text_adventure_game.html"; // Replace with actual link to your text adventure game
+        }
+
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
             var resultsContainer = document.getElementById("searchResults");
@@ -84,7 +88,7 @@
             if (input !== "") {
                 // Simulated search results (replace with actual search logic)
                 var results = [
-                    { title: "Adventure Game 1", link: "#" },
+                    { title: "Adventure Game 1", link: "text_adventure_game.html" },
                     { title: "Adventure Game 2", link: "#" },
                     { title: "Adventure Game 3", link: "#" }
                 ];
@@ -125,7 +129,8 @@
     <div>
         <!-- Your text adventure game content goes here -->
         <h2>Text Adventure Game</h2>
-        <p>This is where your text adventure game content will be.</p>
+        <p>Explore an interactive text adventure.</p>
+        <button onclick="startTextAdventure()">Start Text Adventure</button>
     </div>
 
     <!-- Search Results Container -->
