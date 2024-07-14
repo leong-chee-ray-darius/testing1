@@ -4,16 +4,23 @@
     <title>This is the title of the webpage!</title>
   </head>
   <body>
-    import random
+    <h1>Welcome to the Number Guessing Game!</h1>
+    <p>I'm thinking of a number between 1 and 100.</p>
+
+    <script>
+      // JavaScript for basic interaction, if needed
+      // (though your example doesn't require client-side scripting)
+    </script>
+
+    <p>To play the game, run the Python script below:</p>
+    <pre>
+import random
 
 def main():
     # Generate a random number between 1 and 100
     number_to_guess = random.randint(1, 100)
     attempts = 0
     guessed_correctly = False
-
-    print("Welcome to the Number Guessing Game!")
-    print("I'm thinking of a number between 1 and 100.")
 
     # Game loop
     while not guessed_correctly:
@@ -36,6 +43,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+    </pre>
 
+    <p>Note: This script runs on the server or locally in a Python environment and does not execute directly within the browser.</p>
   </body>
 </html>
