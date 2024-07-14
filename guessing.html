@@ -74,6 +74,10 @@
         }
     </style>
     <script>
+        function startNumberGuessing() {
+            window.location.href = "number_guessing_game.html"; // Replace with actual link to your number guessing game
+        }
+
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
             var resultsContainer = document.getElementById("searchResults");
@@ -84,7 +88,7 @@
             if (input !== "") {
                 // Simulated search results (replace with actual search logic)
                 var results = [
-                    { title: "Number Game 1", link: "#" },
+                    { title: "Number Game 1", link: "number_guessing_game.html" },
                     { title: "Number Game 2", link: "#" },
                     { title: "Number Game 3", link: "#" }
                 ];
@@ -125,13 +129,9 @@
     <div>
         <!-- Your number guessing game content goes here -->
         <h2>Number Guessing Game</h2>
-        <p>This is where your number guessing game content will be.</p>
+        <p>Guess the correct number!</p>
+        <button onclick="startNumberGuessing()">Start Number Guessing Game</button>
     </div>
 
     <!-- Search Results Container -->
-    <div class="search-results" id="searchResults">
-        <!-- Results will be dynamically added here -->
-    </div>
-
-</body>
-</html>
+    <div class="
