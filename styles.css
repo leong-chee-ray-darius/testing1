@@ -147,4 +147,37 @@ body {
     background-color: #fff;
     padding: 10px;
     border-radius: 8px;
-    b
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: none; /* Initially hidden */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.settings-menu label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.settings-menu select {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.save-button {
+    margin-top: 20px;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Adjustments for dark mode */
+.dark-mode .game-container {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .settings-menu {
+    background-color: #333;
+    color: #fff;
+}
