@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text RPG</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="game.js"></script>
 </head>
 <body>
     <div class="game-container">
@@ -32,19 +31,19 @@
             <table>
                 <tr>
                     <th>Health</th>
-                    <td id="health">100</td>
-                </tr>
-                <tr>
-                    <th>Strength</th>
-                    <td id="strength">10</td>
+                    <td id="playerHealth">100</td>
                 </tr>
                 <tr>
                     <th>Magic</th>
-                    <td id="magic">5</td>
+                    <td id="playerMagic">50</td>
                 </tr>
                 <tr>
-                    <th>Defense</th>
-                    <td id="defense">5</td>
+                    <th>Enemy Health</th>
+                    <td id="enemyHealth">80</td>
+                </tr>
+                <tr>
+                    <th>Enemy Magic</th>
+                    <td id="enemyMagic">40</td>
                 </tr>
                 <!-- Add more stats as needed -->
             </table>
@@ -90,17 +89,17 @@
         <div class="save-button">
             <button onclick="saveGame()">Save Game</button>
         </div>
-        <div class="skill-tree" id="skillTree" style="display:none;">
-            <strong>Skill Tree:</strong><br>
-            <!-- Skill tree dynamically generated here -->
+        <div class="bar">
+            <div id="playerHealthBar" class="progress" style="width: 100%;"></div>
         </div>
-        <div class="shop-menu" id="shopMenu" style="display:none;">
-            <strong>Shop:</strong><br>
-            <!-- Shop items dynamically generated here -->
+        <div class="bar">
+            <div id="playerMagicBar" class="progress" style="width: 100%;"></div>
         </div>
-        <div class="skills-menu" id="skillsMenu" style="display:none;">
-            <strong>Skills:</strong><br>
-            <!-- Skills dynamically generated here -->
+        <div class="bar">
+            <div id="enemyHealthBar" class="progress" style="width: 100%;"></div>
+        </div>
+        <div class="bar">
+            <div id="enemyMagicBar" class="progress" style="width: 100%;"></div>
         </div>
     </div>
 
