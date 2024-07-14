@@ -115,6 +115,13 @@
 
     <!-- JavaScript for Search Functionality -->
     <script>
+        var results = [
+            { title: "Text Adventure Game", link: "https://leong-chee-ray-darius.github.io/testing1/game.html" },
+            { title: "Guessing Game", link: "https://leong-chee-ray-darius.github.io/testing1/guessing.html" },
+            { title: "My Game 3", link: "https://github.com/your-username/my-game-3" }
+            // Add more games as needed
+        ];
+
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
             var resultsContainer = document.getElementById("searchResults");
@@ -123,28 +130,28 @@
             resultsContainer.innerHTML = "";
 
             if (input !== "") {
-                // Simulated search results (replace with actual search logic)
-                var results = [
-                    { title: "Text Adventure Game", link: "https://leong-chee-ray-darius.github.io/testing1/game.html" },
-                { title: "Guessing game", link: "https://leong-chee-ray-darius.github.io/testing1/guessing.html" },
-                { title: "My Game 3", link: "https://github.com/your-username/my-game-3" },
-                ];
+                // Filter games based on input
+                var filteredGames = results.filter(function(game) {
+                    return game.title.toLowerCase().includes(input);
+                });
 
                 // Display up to 3 results
-                var maxResults = Math.min(results.length, 3);
+                var maxResults = Math.min(filteredGames.length, 3);
                 for (var i = 0; i < maxResults; i++) {
-                    var result = results[i];
+                    var game = filteredGames[i];
                     var button = document.createElement("button");
-                    button.textContent = result.title;
-                    button.onclick = function() {
-                        window.location.href = result.link; // Navigate to result link
-                    };
+                    button.textContent = game.title;
+                    button.onclick = function(url) {
+                        return function() {
+                            window.location.href = url; // Navigate to game link
+                        };
+                    }(game.link);
                     resultsContainer.appendChild(button);
                 }
+
                 resultsContainer.style.display = "block"; // Show results container
             } else {
                 resultsContainer.style.display = "none"; // Hide results container if no input
-                alert("Please enter a search term.");
             }
         }
 
@@ -157,17 +164,15 @@
 
             if (input.length > 0) {
                 // Simulated suggestions (replace with actual search logic)
-                var suggestions = [
-                    "Adventure Game 1",
-                    "Adventure Game 2",
-                    "Adventure Game 3"
-                ];
+                var suggestions = results.filter(function(game) {
+                    return game.title.toLowerCase().includes(input);
+                });
 
                 // Display suggestions
                 for (var i = 0; i < suggestions.length; i++) {
                     var suggestion = suggestions[i];
                     var li = document.createElement("li");
-                    li.textContent = suggestion;
+                    li.textContent = suggestion.title;
                     li.onclick = function() {
                         document.getElementById("searchInput").value = this.textContent;
                         searchGames(); // Call search function when suggestion clicked
