@@ -1,68 +1,69 @@
-/* Reset default margin and padding for the whole page */
-body, html {
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
     margin: 0;
     padding: 0;
 }
 
-/* Game container styles */
-.game-container {
-    max-width: 800px; /* Adjust width as per your design */
-    margin: 20px auto; /* Center the container */
-    padding: 20px;
-    background-color: #fff; /* Default background color */
-    color: #333; /* Default text color */
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+#title-screen {
+    text-align: center;
+    margin-top: 20%;
 }
 
-/* Dark mode styles */
-/* Dark mode styles */
-.dark-mode body {
-    background-color: #201c1c; /* Dark background color for the entire page */
+#title-screen h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
 }
 
-.dark-mode .game-container {
-    background-color: #201c1c; /* Dark background color */
-    color: #aeb2b5; /* Light text color */
-    border-color: #333; /* Dark border color */
+#start-game-button {
+    padding: 10px 20px;
+    font-size: 1.5em;
+    cursor: pointer;
 }
 
-/* Dark mode styles for progress bars */
-.dark-mode .progress {
-    background-color: #333; /* Darker progress bar color */
-}
-
-/* Button styles */
-.button-container button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-.progress-bars {
-    margin-top: 20px;
+#game-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
-.progress {
-    height: 20px;
-    background-color: #4CAF50; 
-    width: 100%;
-    transition: width 0.3s ease-in-out; 
-}
-.bar {
-    width: calc(50% - 5px); /* Adjust as per your layout */
+#text-display {
+    width: 80%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
-/* Dark mode styles for progress bars */
-.dark-mode .progress {
-    background-color: #8bc34a; /* Darker green */
+#actions {
+    margin-bottom: 20px;
 }
-/* Button styles */
-.button-container button,
-.settings-menu button,
-.city-options button,
-.magic-menu button,
-.defense-menu button {
-    border-radius: 10px; /* Rounded corners */
+
+.action-button {
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#inventory, #stats {
+    width: 80%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#inventory-list {
+    list-style: none;
+    padding: 0;
+}
+
+#footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
 }
