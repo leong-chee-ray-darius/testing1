@@ -122,6 +122,32 @@
         .defense-menu button:hover {
             background-color: #495057;
         }
+        .settings-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: none; /* Initially hidden */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+        .settings-menu label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .settings-menu select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .save-button {
+            margin-top: 20px;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -249,88 +275,74 @@
             // Add more areas as needed
         ];
 
-        function explore() {
+        function updateGameText(text) {
             var gameText = document.getElementById("gameText");
-            gameText.textContent = "You explore the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...\n";
-            // Add more exploration logic
+            gameText.textContent = text;
+        }
+
+        function explore() {
+            updateGameText("You explore the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...\n");
         }
 
         function startFight() {
-            var gameText = document.getElementById("gameText");
-            gameText.textContent = "You prepare for a fight in the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...\n";
-            // Add fight logic
+            updateGameText("You prepare for a fight in the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...\n");
         }
 
         function changeArea() {
             var areaSelect = document.getElementById("areaSelect");
             var selectedAreaId = parseInt(areaSelect.value);
             player.area = selectedAreaId;
-            var gameText = document.getElementById("gameText");
-            gameText.textContent = "Moved to " + areas[player.area - 1].name + ".\n";
+            updateGameText("Moved to " + areas[player.area - 1].name + ".\n");
         }
 
         function enterCity() {
             var cityMenu = document.getElementById("cityMenu");
             var cityOptions = document.getElementById("cityOptions");
-            var citySelect = document.getElementById("citySelect");
 
             if (!player.city) {
                 cityMenu.style.display = "block";
                 cityOptions.style.display = "block";
                 player.city = true;
-                var gameText = document.getElementById("gameText");
-                gameText.textContent = "You enter the City of Eldoria.\n";
+                updateGameText("You enter the City of Eldoria.\n");
             } else {
                 cityMenu.style.display = "none";
                 cityOptions.style.display = "none";
                 player.city = false;
-                var gameText = document.getElementById("gameText");
-                gameText.textContent = "You leave the City of Eldoria.\n";
+                updateGameText("You leave the City of Eldoria.\n");
             }
         }
 
         function sellLoot() {
-            // Placeholder function for selling loot
             updateGameText("You sell your loot in the city.\n");
         }
 
         function buyItems() {
-            // Placeholder function for buying items
             updateGameText("You buy items in the city.\n");
         }
 
         function learnSkills() {
-            // Placeholder function for learning skills
             updateGameText("You learn new skills in the city.\n");
         }
 
         function exploreCity() {
-            // Placeholder function for exploring the city
             updateGameText("You explore the streets of the city.\n");
         }
 
         function castSpell(spell) {
-            // Placeholder function for casting spells
             updateGameText("You cast the " + spell + " spell.\n");
         }
 
         function useShield() {
-            // Placeholder function for using shield
             updateGameText("You use your shield to defend.\n");
         }
 
         function saveGame() {
-            // Implement save game functionality (e.g., using localStorage or backend API)
             alert("Game saved!");
         }
 
         function toggleSettings() {
             var settingsMenu = document.getElementById("settingsMenu");
-            if (settingsMenu.style.display === "block") {
-                settingsMenu.style.display = "none";
-            } else {
-                settingsMenu.style.display = "block";
-            }
+            settingsMenu.style.display = (settingsMenu.style.display === "block") ? "none" : "block";
         }
 
         function toggleDarkMode() {
