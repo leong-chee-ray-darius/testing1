@@ -11,6 +11,7 @@
             margin: 20px;
         }
         .search-container {
+            position: relative;
             margin-bottom: 20px;
         }
         .search-container input[type=text] {
@@ -44,7 +45,10 @@
             border: 1px solid #ccc;
             border-top: none;
             margin-top: 0;
-            margin-left: 15%;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
             display: none;
         }
         .suggestions li {
@@ -54,6 +58,35 @@
         }
         .suggestions li:hover {
             background-color: #ddd;
+        }
+        .search-results {
+            margin-top: 20px;
+            text-align: left; /* Adjust text alignment as needed */
+        }
+        .search-results button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-results button:hover {
+            background-color: #0056b3;
+        }
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
         }
     </style>
     <script>
@@ -83,7 +116,9 @@
                     };
                     resultsContainer.appendChild(button);
                 }
+                resultsContainer.style.display = "block"; // Show results container
             } else {
+                resultsContainer.style.display = "none"; // Hide results container if no input
                 alert("Please enter a search term.");
             }
         }
@@ -141,7 +176,7 @@
     </div>
 
     <!-- Search Results Container -->
-    <div id="searchResults">
+    <div id="searchResults" class="search-results" style="display: none;">
         <!-- Results will be dynamically added here -->
     </div>
 
