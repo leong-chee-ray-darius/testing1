@@ -44,17 +44,35 @@
         .search-container button:hover {
             background-color: #45a049;
         }
-        .content {
-            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
-            padding: 20px;
-            text-align: center;
+        .suggestions {
+            position: absolute;
+            background-color: #f1f1f1;
+            z-index: 998;
+            width: 30%;
+            list-style-type: none;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+            margin-top: 0;
+            left: calc(50% - 50px); /* Center the container horizontally and move 50px to the left */
+            transform: translateX(-50%);
+            display: none;
         }
-        .game-content {
-            padding: 20px;
+        .suggestions li {
+            padding: 10px;
             text-align: left;
+            cursor: pointer;
+            color: #000; /* Set text color to black */
         }
-        .choice-button {
-            margin-top: 10px;
+        .suggestions li:hover {
+            background-color: #ddd;
+        }
+        .search-results {
+            margin-top: 20px;
+            text-align: left; /* Adjust text alignment as needed */
+        }
+        .search-results button {
+            margin: 5px;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -63,8 +81,13 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .choice-button:hover {
+        .search-results button:hover {
             background-color: #0056b3;
+        }
+        .content {
+            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
+            padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -73,7 +96,9 @@
     <header>
         <h1>Game Hub</h1>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
+            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="showSuggestions()">
+            <button onclick="searchGames()">Search</button>
+            <ul id="suggestions" class="suggestions"></ul>
         </div>
     </header>
 
@@ -83,16 +108,61 @@
         <p>Explore and play exciting games.</p>
     </div>
 
-    <!-- JavaScript for Search Functionality and Navigation -->
+    <!-- Search Results Container -->
+    <div id="searchResults" class="search-results" style="display: none;">
+        <!-- Results will be dynamically added here -->
+    </div>
+
+    <!-- JavaScript for Search Functionality -->
     <script>
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
+            var resultsContainer = document.getElementById("searchResults");
+
+            // Clear previous results
+            resultsContainer.innerHTML = "";
+
             if (input === "text adventure") {
                 window.location.href = "game.html"; // Redirect to game.html
             } else if (input === "guessing game") {
                 window.location.href = "guessing.html"; // Redirect to guessing.html
+            } else {
+                resultsContainer.style.display = "none"; // Hide results container if no input
+                alert("No games found for your search.");
             }
-            // Add more conditions for other games as needed
+        }
+
+        function showSuggestions() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var suggestionsContainer = document.getElementById("suggestions");
+
+            // Clear previous suggestions
+            suggestionsContainer.innerHTML = "";
+
+            if (input.length > 0) {
+                // Simulated suggestions (replace with actual search logic)
+                var suggestions = [
+                    "Text Adventure Game",
+                    "Guessing Game"
+                ];
+
+                // Display suggestions
+                for (var i = 0; i < suggestions.length; i++) {
+                    var suggestion = suggestions[i];
+                    var li = document.createElement("li");
+                    li.textContent = suggestion;
+                    li.onclick = function() {
+                        document.getElementById("searchInput").value = this.textContent;
+                        searchGames(); // Call search function when suggestion clicked
+                        suggestionsContainer.style.display = "none"; // Hide suggestions
+                    };
+                    suggestionsContainer.appendChild(li);
+                }
+
+                suggestionsContainer.style.display = "block"; // Show suggestions
+            } else {
+                suggestionsContainer.style.display = "none"; // Hide suggestions if no input
+            }
         }
     </script>
 
