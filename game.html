@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Adventure Game</title>
+    <title>Game Hub - Text Adventure Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
         }
         header {
-            background-color: #333;
+            background-color: #444;
             color: #fff;
             padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
         }
         .search-container {
-            display: flex;
-            align-items: center;
+            text-align: center;
+            margin-top: 50px; /* Adjust margin top if needed */
         }
         .search-container input[type=text] {
             padding: 10px;
-            margin: 5px;
             width: 30%;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -44,11 +44,17 @@
         .search-container button:hover {
             background-color: #45a049;
         }
-        .search-results {
-            margin-top: 20px;
+        .content {
+            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
+            padding: 20px;
+            text-align: center;
         }
-        .search-results button {
-            margin: 5px;
+        .game-content {
+            padding: 20px;
+            text-align: left;
+        }
+        .choice-button {
+            margin-top: 10px;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -57,86 +63,66 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .search-results button:hover {
+        .choice-button:hover {
             background-color: #0056b3;
         }
-        nav {
-            background-color: #444;
-            padding: 10px 0;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
     </style>
-    <script>
-        function startTextAdventure() {
-            window.location.href = "text_adventure_game.html"; // Replace with actual link to your text adventure game
-        }
-
-        function searchGames() {
-            var input = document.getElementById("searchInput").value.toLowerCase();
-            var resultsContainer = document.getElementById("searchResults");
-
-            // Clear previous results
-            resultsContainer.innerHTML = "";
-
-            if (input !== "") {
-                // Simulated search results (replace with actual search logic)
-                var results = [
-                    { title: "Adventure Game 1", link: "text_adventure_game.html" },
-                    { title: "Adventure Game 2", link: "#" },
-                    { title: "Adventure Game 3", link: "#" }
-                ];
-
-                // Display up to 3 results
-                var maxResults = Math.min(results.length, 3);
-                for (var i = 0; i < maxResults; i++) {
-                    var result = results[i];
-                    var button = document.createElement("button");
-                    button.textContent = result.title;
-                    button.onclick = function() {
-                        window.location.href = result.link; // Navigate to result link
-                    };
-                    resultsContainer.appendChild(button);
-                }
-            } else {
-                alert("Please enter a search term.");
-            }
-        }
-    </script>
 </head>
 <body>
-    <!-- Header with Search Bar and Navigation -->
+    <!-- Header with Search Bar -->
     <header>
-        <h1>Game Hub</h1>
+        <h1>Game Hub - Text Adventure Game</h1>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search games...">
             <button onclick="searchGames()">Search</button>
         </div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="game.html">Play Text Adventure</a>
-            <a href="guessing.html">Play Number Guessing Game</a>
-            <!-- Add more links as needed -->
-        </nav>
     </header>
 
-    <div>
-        <!-- Your text adventure game content goes here -->
-        <h2>Text Adventure Game</h2>
-        <p>Explore an interactive text adventure.</p>
-        <button onclick="startTextAdventure()">Start Text Adventure</button>
+    <!-- Main Content -->
+    <div class="content">
+        <h2>Welcome to the Text Adventure Game!</h2>
+        <div class="game-content" id="gameContent">
+            <!-- Game starts here -->
+            <p>You wake up in a mysterious forest. A path leads deeper into the woods. What do you do?</p>
+            <button class="choice-button" onclick="goPath()">Follow the path</button>
+        </div>
     </div>
 
-    <!-- Search Results Container -->
-    <div class="search-results" id="searchResults">
-        <!-- Results will be dynamically added here -->
-    </div>
+    <!-- JavaScript for Search Functionality and Game Logic -->
+    <script>
+        function searchGames() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            if (input === "text adventure") {
+                // Replace this with actual logic to navigate or display relevant content
+                window.location.href = "game.html"; // Example navigation for demonstration
+            } else {
+                alert("Game not found.");
+            }
+        }
+
+        function goPath() {
+            var gameContent = document.getElementById("gameContent");
+
+            // Update game content based on player's choice
+            gameContent.innerHTML = "<p>You follow the path and encounter a friendly dwarf.</p>" +
+                                    "<button class='choice-button' onclick='talkDwarf()'>Talk to the dwarf</button>";
+        }
+
+        function talkDwarf() {
+            var gameContent = document.getElementById("gameContent");
+
+            // Update game content based on player's choice
+            gameContent.innerHTML = "<p>The dwarf tells you about a hidden treasure nearby.</p>" +
+                                    "<button class='choice-button' onclick='findTreasure()'>Search for the treasure</button>";
+        }
+
+        function findTreasure() {
+            var gameContent = document.getElementById("gameContent");
+
+            // Update game content based on player's choice
+            gameContent.innerHTML = "<p>You find the treasure chest! Congratulations!</p>";
+        }
+    </script>
 
 </body>
 </html>
