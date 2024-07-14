@@ -34,33 +34,26 @@
         .search-container button:hover {
             background-color: #45a049;
         }
-        .search-results {
-            margin-top: 20px;
+        .suggestions {
+            position: absolute;
+            background-color: #f1f1f1;
+            z-index: 999;
+            width: 30%;
+            list-style-type: none;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+            margin-top: 0;
+            margin-left: 15%;
+            display: none;
         }
-        .search-results button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
+        .suggestions li {
+            padding: 10px;
+            text-align: left;
             cursor: pointer;
-            font-size: 16px;
         }
-        .search-results button:hover {
-            background-color: #0056b3;
-        }
-        nav {
-            background-color: #444;
-            padding: 10px 0;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        nav a:hover {
-            text-decoration: underline;
+        .suggestions li:hover {
+            background-color: #ddd;
         }
     </style>
     <script>
@@ -94,22 +87,51 @@
                 alert("Please enter a search term.");
             }
         }
+
+        function showSuggestions() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var suggestionsContainer = document.getElementById("suggestions");
+
+            // Clear previous suggestions
+            suggestionsContainer.innerHTML = "";
+
+            if (input.length > 0) {
+                // Simulated suggestions (replace with actual search logic)
+                var suggestions = [
+                    "Adventure Game 1",
+                    "Adventure Game 2",
+                    "Adventure Game 3"
+                ];
+
+                // Display suggestions
+                for (var i = 0; i < suggestions.length; i++) {
+                    var suggestion = suggestions[i];
+                    var li = document.createElement("li");
+                    li.textContent = suggestion;
+                    li.onclick = function() {
+                        document.getElementById("searchInput").value = this.textContent;
+                        searchGames(); // Call search function when suggestion clicked
+                        suggestionsContainer.style.display = "none"; // Hide suggestions
+                    };
+                    suggestionsContainer.appendChild(li);
+                }
+
+                suggestionsContainer.style.display = "block"; // Show suggestions
+            } else {
+                suggestionsContainer.style.display = "none"; // Hide suggestions if no input
+            }
+        }
     </script>
 </head>
 <body>
-    <!-- Header with Search Bar and Navigation -->
+    <!-- Header with Search Bar -->
     <header>
         <h1>Game Hub</h1>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games...">
+            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="showSuggestions()">
             <button onclick="searchGames()">Search</button>
+            <ul id="suggestions" class="suggestions"></ul>
         </div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="game.html">Play Text Adventure</a>
-            <a href="guessing.html">Play Number Guessing Game</a>
-            <!-- Add more links as needed -->
-        </nav>
     </header>
 
     <!-- Main Content -->
@@ -119,7 +141,7 @@
     </div>
 
     <!-- Search Results Container -->
-    <div class="search-results" id="searchResults">
+    <div id="searchResults">
         <!-- Results will be dynamically added here -->
     </div>
 
