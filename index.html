@@ -1,25 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-  </style>
-</head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;My Python Project&lt;/title&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Welcome to My Python Project&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;This is hosted with GitHub Pages.&lt;/p&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
-</body>
-</html>
+import random
+
+def main():
+    # Generate a random number between 1 and 100
+    number_to_guess = random.randint(1, 100)
+    attempts = 0
+    guessed_correctly = False
+
+    print("Welcome to the Number Guessing Game!")
+    print("I'm thinking of a number between 1 and 100.")
+
+    # Game loop
+    while not guessed_correctly:
+        try:
+            # Get the player's guess
+            guess = int(input("Make a guess: "))
+            attempts += 1
+
+            # Check if the guess is correct
+            if guess < number_to_guess:
+                print("Too low.")
+            elif guess > number_to_guess:
+                print("Too high.")
+            else:
+                guessed_correctly = True
+                print(f"Congratulations! You've guessed the number {number_to_guess} correctly.")
+                print(f"It took you {attempts} attempts.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+if __name__ == "__main__":
+    main()
