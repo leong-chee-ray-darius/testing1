@@ -57,6 +57,17 @@
             text-decoration: underline;
         }
     </style>
+    <script>
+        function searchGames() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            if (input !== "") {
+                alert("Searching for: " + input);
+                // Replace with actual search logic for text adventure game
+            } else {
+                alert("Please enter a search term.");
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Header with Search Bar and Navigation -->
