@@ -44,6 +44,22 @@
         .search-container button:hover {
             background-color: #45a049;
         }
+        .search-results {
+            margin-top: 20px;
+        }
+        .search-results button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-results button:hover {
+            background-color: #c82333;
+        }
         nav {
             background-color: #444;
             padding: 10px 0;
@@ -60,9 +76,30 @@
     <script>
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
+            var resultsContainer = document.getElementById("searchResults");
+
+            // Clear previous results
+            resultsContainer.innerHTML = "";
+
             if (input !== "") {
-                alert("Searching for: " + input);
-                // Replace with actual search logic for number guessing game
+                // Simulated search results (replace with actual search logic)
+                var results = [
+                    { title: "Number Game 1", link: "#" },
+                    { title: "Number Game 2", link: "#" },
+                    { title: "Number Game 3", link: "#" }
+                ];
+
+                // Display up to 3 results
+                var maxResults = Math.min(results.length, 3);
+                for (var i = 0; i < maxResults; i++) {
+                    var result = results[i];
+                    var button = document.createElement("button");
+                    button.textContent = result.title;
+                    button.onclick = function() {
+                        window.location.href = result.link; // Navigate to result link
+                    };
+                    resultsContainer.appendChild(button);
+                }
             } else {
                 alert("Please enter a search term.");
             }
@@ -89,6 +126,11 @@
         <!-- Your number guessing game content goes here -->
         <h2>Number Guessing Game</h2>
         <p>This is where your number guessing game content will be.</p>
+    </div>
+
+    <!-- Search Results Container -->
+    <div class="search-results" id="searchResults">
+        <!-- Results will be dynamically added here -->
     </div>
 
 </body>
