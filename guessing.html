@@ -4,59 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <!-- Include the header -->
+    <!-- Header and Navigation -->
     <header>
-        <script src="header.html"></script>
+        <h1>Game Hub</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="game.html">Play Text Adventure</a>
+            <a href="guessing.html">Play Number Guessing Game</a>
+            <!-- Add more links as needed -->
+        </nav>
     </header>
 
-    <main>
-        <h1>Number Guessing Game</h1>
-        <p>I'm thinking of a number between 1 and 100.</p>
+    <div>
+        <!-- Your number guessing game content goes here -->
+        <h2>Number Guessing Game</h2>
+        <p>This is where your number guessing game content will be.</p>
+    </div>
 
-        <form id="guessForm">
-            <label for="guess">Enter your guess:</label>
-            <input type="number" id="guess" min="1" max="100" required>
-            <button type="submit">Guess</button>
-        </form>
-
-        <div id="output"></div>
-    </main>
-
-    <script>
-        // Initialize the game with a random number
-        var numberToGuess = Math.floor(Math.random() * 100) + 1;
-        var attempts = 0;
-
-        document.getElementById('guessForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
-
-            var guessInput = document.getElementById('guess');
-            var guess = parseInt(guessInput.value);
-            var outputDiv = document.getElementById('output');
-
-            if (isNaN(guess) || guess < 1 || guess > 100) {
-                outputDiv.textContent = "Please enter a valid number between 1 and 100.";
-                return;
-            }
-
-            attempts++;
-
-            if (guess < numberToGuess) {
-                outputDiv.textContent = "Too low. Try again.";
-            } else if (guess > numberToGuess) {
-                outputDiv.textContent = "Too high. Try again.";
-            } else {
-                outputDiv.textContent = `Congratulations! You've guessed the number ${numberToGuess} correctly in ${attempts} attempts.`;
-                // Reset the game after correct guess
-                numberToGuess = Math.floor(Math.random() * 100) + 1;
-                attempts = 0;
-            }
-
-            // Clear the input field for the next guess
-            guessInput.value = '';
-        });
-    </script>
 </body>
 </html>
