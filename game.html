@@ -79,7 +79,7 @@
         </div>
         <div class="button-container">
             <button onclick="explore()">Explore</button>
-            <button onclick="fight()">Fight</button>
+            <button onclick="startFight()">Fight</button>
             <!-- Add more buttons for additional actions -->
         </div>
         <div class="inventory" id="inventory">
@@ -128,19 +128,43 @@
             inventory: []
         };
 
-        var enemies = [
-            { name: "Goblin", level: 1, health: 30, strength: 5, drops: ["Gold", "Health Potion"] },
-            { name: "Orc", level: 2, health: 50, strength: 8, drops: ["Gold", "Armor"] },
-            { name: "Dragon", level: 5, health: 100, strength: 15, drops: ["Gold", "Dragon Scale"] },
-            { name: "Skeleton", level: 6, health: 35, strength: 6, drops: ["Gold", "Bone"] },
-            // Add more enemies as needed
-        ];
+        // Define areas with their respective enemies, bosses, and secret boss
+        var areas = {
+            "Forest": {
+                enemies: [
+                    { name: "Goblin", level: 1, health: 30, strength: 5, drops: ["Gold", "Health Potion"] },
+                    { name: "Orc", level: 2, health: 50, strength: 8, drops: ["Gold", "Armor"] },
+                    // Add more enemies for the Forest area
+                ],
+                bosses: [
+                    { name: "Forest Guardian", level: 10, health: 150, strength: 20, drops: ["Forest Key"] }
+                    // Add more bosses for the Forest area
+                ],
+                secretBoss: { name: "Ancient Treant", level: 15, health: 200, strength: 25, drops: ["Ancient Relic"] }
+            },
+            "Cave": {
+                enemies: [
+                    { name: "Skeleton", level: 6, health: 35, strength: 6, drops: ["Gold", "Bone"] },
+                    { name: "Bat", level: 4, health: 20, strength: 4, drops: ["Gold", "Wing"] },
+                    // Add more enemies for the Cave area
+                ],
+                bosses: [
+                    { name: "Cave Troll", level: 12, health: 180, strength: 18, drops: ["Cave Key"] }
+                    // Add more bosses for the Cave area
+                ],
+                secretBoss: { name: "Dark Dragon", level: 20, health: 300, strength: 30, drops: ["Dark Gem"] }
+            },
+            // Define more areas with enemies, bosses, and secret bosses
+        };
+
+        var currentArea = "Forest";
+        var currentEnemy;
 
         function explore() {
             var gameText = document.getElementById("gameText");
             var inventoryList = document.getElementById("inventoryList");
 
-            gameText.textContent = "You explore the area...";
+            gameText.textContent = "You explore the " + currentArea + "...\n";
 
             // Example of finding an item
             var newItem = "Health Potion";
@@ -148,44 +172,90 @@
             updateInventory(inventoryList);
         }
 
-        function fight() {
+        function startFight() {
             var gameText = document.getElementById("gameText");
 
-            // Randomly select an enemy
-            var enemy = getRandomEnemy();
-            gameText.textContent = "You encounter a " + enemy.name + " (Level " + enemy.level + ")!\n";
+            // Randomly select an enemy from the current area
+            var enemiesInArea = areas[currentArea].enemies;
+            currentEnemy = enemiesInArea[Math.floor(Math.random() * enemiesInArea.length)];
+            gameText.textContent = "You encounter a " + currentEnemy.name + " (Level " + currentEnemy.level + ")!\n";
 
-            // Simulate turn-based combat
-            var isPlayerTurn = true;
-            while (player.health > 0 && enemy.health > 0) {
-                if (isPlayerTurn) {
-                    // Player's turn
+            // Display fight options
+            showFightOptions();
+        }
+
+        function showFightOptions() {
+            var buttonContainer = document.getElementsByClassName("button-container")[0];
+            buttonContainer.innerHTML = "";
+
+            var fightOptions = ["Attack", "Use Item", "Run"];
+            fightOptions.forEach(function(option) {
+                var button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = function() {
+                    handleFightOption(option);
+                };
+                buttonContainer.appendChild(button);
+            });
+        }
+
+        function handleFightOption(option) {
+            var gameText = document.getElementById("gameText");
+            var buttonContainer = document.getElementsByClassName("button-container")[0];
+
+            switch (option) {
+                case "Attack":
                     var playerDamage = Math.floor(Math.random() * player.strength) + 1;
-                    enemy.health -= playerDamage;
-                    gameText.textContent += "You deal " + playerDamage + " damage to the " + enemy.name + ".\n";
-                } else {
-                    // Enemy's turn
-                    var enemyDamage = Math.floor(Math.random() * enemy.strength) + 1;
-                    player.health -= enemyDamage;
-                    gameText.textContent += "The " + enemy.name + " deals " + enemyDamage + " damage to you.\n";
-                }
-
-                isPlayerTurn = !isPlayerTurn;
+                    currentEnemy.health -= playerDamage;
+                    gameText.textContent += "You attack the " + currentEnemy.name + " and deal " + playerDamage + " damage.\n";
+                    break;
+                case "Use Item":
+                    if (player.inventory.length > 0) {
+                        var randomItemIndex = Math.floor(Math.random() * player.inventory.length);
+                        var usedItem = player.inventory[randomItemIndex];
+                        gameText.textContent += "You use " + usedItem + ".\n";
+                        // Implement item effects here, for example:
+                        // player.health += 20; // Restore health
+                        player.inventory.splice(randomItemIndex, 1); // Remove used item from inventory
+                        updateInventory(document.getElementById("inventoryList"));
+                    } else {
+                        gameText.textContent += "You have no items to use!\n";
+                    }
+                    break;
+                case "Run":
+                    gameText.textContent += "You attempt to run away...\n";
+                    // Implement run logic here, potentially affecting combat outcome
+                    break;
+                default:
+                    break;
             }
 
-            // Check outcome of the fight
-            if (player.health <= 0) {
-                gameText.textContent += "You were defeated by the " + enemy.name + ". Game Over!";
-                // Handle game over scenario
-            } else {
-                gameText.textContent += "You defeated the " + enemy.name + "!\n";
-
+            // Check enemy's health
+            if (currentEnemy.health <= 0) {
+                gameText.textContent += "You defeated the " + currentEnemy.name + "!\n";
                 // Gain drops from enemy
-                enemy.drops.forEach(function(drop) {
+                currentEnemy.drops.forEach(function(drop) {
                     player.inventory.push(drop);
                 });
-
                 updateInventory(document.getElementById("inventoryList"));
+                // Reset button container after defeating enemy
+                setTimeout(function() {
+                    buttonContainer.innerHTML = '<button onclick="explore()">Explore</button><button onclick="startFight()">Fight</button>';
+                }, 2000); // Wait 2 seconds before resetting
+            } else {
+                // Enemy's turn
+                var enemyDamage = Math.floor(Math.random() * currentEnemy.strength) + 1;
+                player.health -= enemyDamage;
+                gameText.textContent += "The " + currentEnemy.name + " attacks you and deals " + enemyDamage + " damage.\n";
+
+                // Check player's health
+                if player.health <= 0) {
+                    gameText.textContent += "You were defeated by the " + currentEnemy.name + ". Game Over!";
+                    // Handle game over scenario
+                } else {
+                    // Redisplay fight options for next player turn
+                    showFightOptions();
+                }
             }
 
             updateStats();
@@ -217,16 +287,11 @@
                 case "large":
                     gameText.style.fontSize = "20px";
                     break;
-                // Add more cases for additional text sizes
                 default:
                     break;
             }
         }
-
-        function getRandomEnemy() {
-            var randomIndex = Math.floor(Math.random() * enemies.length);
-            return enemies[randomIndex];
-        }
     </script>
 </body>
 </html>
+
