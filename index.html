@@ -3,28 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Game Hub</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
         .search-container {
-            display: flex;
-            align-items: center;
+            margin-bottom: 20px;
         }
         .search-container input[type=text] {
             padding: 10px;
-            margin: 5px;
             width: 30%;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -44,6 +34,22 @@
         .search-container button:hover {
             background-color: #45a049;
         }
+        .search-results {
+            margin-top: 20px;
+        }
+        .search-results button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-results button:hover {
+            background-color: #0056b3;
+        }
         nav {
             background-color: #444;
             padding: 10px 0;
@@ -59,13 +65,31 @@
     </style>
     <script>
         function searchGames() {
-            // Get the input value
             var input = document.getElementById("searchInput").value.toLowerCase();
-            
-            // Check if input is not empty
+            var resultsContainer = document.getElementById("searchResults");
+
+            // Clear previous results
+            resultsContainer.innerHTML = "";
+
             if (input !== "") {
-                // Perform search logic (dummy example)
-                alert("Searching for: " + input);
+                // Simulated search results (replace with actual search logic)
+                var results = [
+                    { title: "Adventure Game 1", link: "game1.html" },
+                    { title: "Adventure Game 2", link: "game2.html" },
+                    { title: "Adventure Game 3", link: "game3.html" }
+                ];
+
+                // Display up to 3 results
+                var maxResults = Math.min(results.length, 3);
+                for (var i = 0; i < maxResults; i++) {
+                    var result = results[i];
+                    var button = document.createElement("button");
+                    button.textContent = result.title;
+                    button.onclick = function() {
+                        window.location.href = result.link; // Navigate to result link
+                    };
+                    resultsContainer.appendChild(button);
+                }
             } else {
                 alert("Please enter a search term.");
             }
@@ -88,10 +112,15 @@
         </nav>
     </header>
 
+    <!-- Main Content -->
     <div>
-        <h2>Welcome to the Game Hub!</h2>
-        <p>This is the home page of the Game Hub.</p>
-        <p>Enter a search term above to find games.</p>
+        <h2>Welcome to Game Hub!</h2>
+        <p>Explore and play exciting games.</p>
+    </div>
+
+    <!-- Search Results Container -->
+    <div class="search-results" id="searchResults">
+        <!-- Results will be dynamically added here -->
     </div>
 
 </body>
