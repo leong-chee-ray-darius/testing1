@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Adventure Game</title>
+    <title>Text RPG</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,6 +47,19 @@
         .inventory {
             margin-top: 30px;
         }
+        .stats {
+            margin-top: 30px;
+        }
+        .stats table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .stats th, .stats td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
         .settings {
             margin-top: 30px;
         }
@@ -58,15 +71,15 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="game-title">Text Adventure Game</div>
+        <div class="game-title">Text RPG</div>
         <div class="game-text" id="gameText">
             <!-- Game text dynamically updated here -->
-            Welcome to the Text Adventure Game! Choose your path...
+            Welcome to the Text RPG! Begin your adventure...
         </div>
         <div class="button-container">
-            <button onclick="chooseOption(1)">Option 1</button>
-            <button onclick="chooseOption(2)">Option 2</button>
-            <!-- Add more buttons for additional choices -->
+            <button onclick="explore()">Explore</button>
+            <button onclick="fight()">Fight</button>
+            <!-- Add more buttons for additional actions -->
         </div>
         <div class="inventory" id="inventory">
             <strong>Inventory:</strong>
@@ -74,6 +87,20 @@
                 <!-- Inventory items dynamically updated here -->
                 <li>No items</li>
             </ul>
+        </div>
+        <div class="stats" id="stats">
+            <strong>Stats:</strong>
+            <table>
+                <tr>
+                    <th>Health</th>
+                    <td id="health">100</td>
+                </tr>
+                <tr>
+                    <th>Strength</th>
+                    <td id="strength">10</td>
+                </tr>
+                <!-- Add more stats as needed -->
+            </table>
         </div>
         <div class="settings" id="settings">
             <strong>Settings:</strong>
@@ -92,26 +119,62 @@
     </div>
 
     <script>
-        function chooseOption(option) {
+        // Initial game state
+        var player = {
+            health: 100,
+            strength: 10,
+            inventory: []
+        };
+
+        function explore() {
             var gameText = document.getElementById("gameText");
             var inventoryList = document.getElementById("inventoryList");
 
-            switch (option) {
-                case 1:
-                    gameText.textContent = "You chose Option 1. Exploring...";
-                    break;
-                case 2:
-                    gameText.textContent = "You chose Option 2. Fighting...";
-                    break;
-                // Add more cases for additional options
-                default:
-                    break;
-            }
+            gameText.textContent = "You explore the area...";
 
-            // Update inventory
-            var newItem = document.createElement("li");
-            newItem.textContent = "New Item";
-            inventoryList.appendChild(newItem);
+            // Example of finding an item
+            var newItem = "Health Potion";
+            player.inventory.push(newItem);
+            updateInventory(inventoryList);
+        }
+
+        function fight() {
+            var gameText = document.getElementById("gameText");
+
+            // Example of a combat scenario
+            var enemyHealth = 50;
+            var damageDealt = player.strength;
+
+            gameText.textContent = "You engage in combat!";
+            gameText.textContent += "\nYou deal " + damageDealt + " damage to the enemy.";
+
+            // Update enemy health (simulation)
+            enemyHealth -= damageDealt;
+
+            if (enemyHealth <= 0) {
+                gameText.textContent += "\nYou defeated the enemy!";
+                // Example of gaining experience points or loot
+            } else {
+                gameText.textContent += "\nThe enemy strikes back!";
+                // Example of taking damage
+                player.health -= 10; // Player takes 10 damage (simulation)
+                updateStats(); // Update health display
+            }
+        }
+
+        function updateInventory(listElement) {
+            listElement.innerHTML = "";
+            player.inventory.forEach(function(item) {
+                var newItem = document.createElement("li");
+                newItem.textContent = item;
+                listElement.appendChild(newItem);
+            });
+        }
+
+        function updateStats() {
+            document.getElementById("health").textContent = player.health;
+            document.getElementById("strength").textContent = player.strength;
+            // Add more stats as needed
         }
 
         function changeTextSize() {
