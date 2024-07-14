@@ -10,7 +10,7 @@
             margin: 0;
             padding: 20px;
             background-color: #f0f0f0;
-            color: #333; /* Default text color */
+            color: #333;
         }
         .game-container {
             max-width: 800px;
@@ -33,23 +33,17 @@
             justify-content: space-between;
             margin-top: 20px;
         }
-        .button-container button,
-        .magic-menu button,
-        .defense-menu button {
-            padding: 8px 16px;
+        .button-container button {
+            padding: 10px 20px;
             font-size: 16px;
-            background-color: #6c757d;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
-            margin-right: 10px;
-            margin-bottom: 10px;
             cursor: pointer;
         }
-        .button-container button:hover,
-        .magic-menu button:hover,
-        .defense-menu button:hover {
-            background-color: #495057;
+        .button-container button:hover {
+            background-color: #0056b3;
         }
         .inventory {
             margin-top: 30px;
@@ -77,19 +71,56 @@
         .settings-button {
             margin-top: 20px;
         }
-        .areas-menu,
-        .city-menu,
-        .magic-menu,
-        .defense-menu {
+        .areas-menu {
             margin-top: 30px;
         }
-        .areas-menu select,
+        .areas-menu select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .city-menu {
+            margin-top: 30px;
+        }
         .city-menu select {
             padding: 8px;
             font-size: 16px;
         }
         .city-options {
             margin-top: 20px;
+        }
+        .magic-menu {
+            margin-top: 30px;
+        }
+        .magic-menu button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .magic-menu button:hover {
+            background-color: #495057;
+        }
+        .defense-menu {
+            margin-top: 30px;
+        }
+        .defense-menu button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .defense-menu button:hover {
+            background-color: #495057;
         }
         .settings-menu {
             position: fixed;
@@ -115,7 +146,33 @@
         }
         .dark-mode {
             background-color: #333;
-            color: #fff; /* Text color in dark mode */
+            color: #fff;
+        }
+        .skill-tree {
+            margin-top: 30px;
+        }
+        .skill-tree ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .skill-tree li {
+            margin-bottom: 10px;
+        }
+        .skill-tree button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .skill-tree button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .skill-tree button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -188,6 +245,14 @@
             <button onclick="learnSkills()">Learn Skills</button>
             <button onclick="exploreCity()">Explore City</button>
         </div>
+        <div class="skill-tree" id="skillTree" style="display:none;">
+            <strong>Skill Tree:</strong>
+            <ul id="skillList">
+                <li><button onclick="learnSkill('Fireball')" id="fireballSkill">Learn Fireball (Level 5)</button></li>
+                <li><button onclick="learnSkill('Heal')" id="healSkill" disabled>Learn Heal (Level 10)</button></li>
+                <!-- Add more skills with appropriate levels and functionality -->
+            </ul>
+        </div>
         <div class="magic-menu" id="magicMenu">
             <strong>Magic:</strong><br>
             <button onclick="castSpell('Fire')">Fire Spell</button>
@@ -231,8 +296,10 @@
             strength: 10,
             magic: 5,
             defense: 5,
+            level: 1,
             area: 1,  // Player starts in Area 1
-            city: false  // Not in city initially
+            city: false,  // Not in city initially
+            skills: []
         };
 
         var areas = [
@@ -240,28 +307,28 @@
             { id: 2, name: "Mountains", recommendedLevel: "10-20" },
             { id: 3, name: "Caves", recommendedLevel: "20-30" },
             { id: 4, name: "Desert", recommendedLevel: "30-40" },
-            { id: 5, name: "Swamp", recommendedLevel: "40-50" },
+            { id: 5, name: "Swamp", recommendedLevel: "40-50" }
             // Add more areas as needed
         ];
 
         function updateGameText(text) {
             var gameText = document.getElementById("gameText");
-            gameText.textContent = text;
+            gameText.textContent += text + "\n";
         }
 
         function explore() {
-            updateGameText("You explore the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...\n");
+            updateGameText("You explore the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...");
         }
 
         function startFight() {
-            updateGameText("You prepare for a fight in the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...\n");
+            updateGameText("You prepare for a fight in the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...");
         }
 
         function changeArea() {
             var areaSelect = document.getElementById("areaSelect");
             var selectedAreaId = parseInt(areaSelect.value);
             player.area = selectedAreaId;
-            updateGameText("Moved to " + areas[player.area - 1].name + ".\n");
+            updateGameText("Moved to " + areas[player.area - 1].name + ".");
         }
 
         function enterCity() {
@@ -272,37 +339,59 @@
                 cityMenu.style.display = "block";
                 cityOptions.style.display = "block";
                 player.city = true;
-                updateGameText("You enter the City of Eldoria.\n");
+                updateGameText("You enter the City of Eldoria.");
             } else {
                 cityMenu.style.display = "none";
                 cityOptions.style.display = "none";
                 player.city = false;
-                updateGameText("You leave the City of Eldoria.\n");
+                updateGameText("You leave the City of Eldoria.");
             }
         }
 
         function sellLoot() {
-            updateGameText("You sell your loot in the city.\n");
+            updateGameText("You sell your loot in the city.");
         }
 
         function buyItems() {
-            updateGameText("You buy items in the city.\n");
+            updateGameText("You buy items in the city.");
         }
 
         function learnSkills() {
-            updateGameText("You learn new skills in the city.\n");
+            var skillTree = document.getElementById("skillTree");
+            skillTree.style.display = "block";
+            updateGameText("You have reached level " + player.level + ". Choose a skill to learn.");
+        }
+
+        function learnSkill(skill) {
+            switch (skill) {
+                case 'Fireball':
+                    if (player.level >= 5 && !player.skills.includes('Fireball')) {
+                        player.skills.push('Fireball');
+                        document.getElementById('fireballSkill').disabled = true;
+                        updateGameText("You have learned the Fireball spell!");
+                    }
+                    break;
+                case 'Heal':
+                    if (player.level >= 10 && !player.skills.includes('Heal')) {
+                        player.skills.push('Heal');
+                        document.getElementById('healSkill').disabled = true;
+                        updateGameText("You have learned the Heal spell!");
+                    }
+                    break;
+                // Add more skills and conditions as needed
+            }
         }
 
         function exploreCity() {
-            updateGameText("You explore the streets of the city.\n");
+            updateGameText("You explore the streets of the city.");
         }
 
         function castSpell(spell) {
-            updateGameText("You cast the " + spell + " spell.\n");
+            updateGameText("You cast the " + spell + " spell.");
         }
 
         function useShield() {
-            updateGameText("You use your shield to defend.\n");
+            updateGameText("You use your shield to defend.");
         }
 
         function saveGame() {
