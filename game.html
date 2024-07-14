@@ -148,32 +148,6 @@
             background-color: #333;
             color: #fff;
         }
-        .skill-tree {
-            margin-top: 30px;
-        }
-        .skill-tree ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .skill-tree li {
-            margin-bottom: 10px;
-        }
-        .skill-tree button {
-            padding: 8px 16px;
-            font-size: 16px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .skill-tree button:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-        }
-        .skill-tree button:hover {
-            background-color: #218838;
-        }
     </style>
 </head>
 <body>
@@ -215,10 +189,6 @@
                     <th>Defense</th>
                     <td id="defense">5</td>
                 </tr>
-                <tr>
-                    <th>Gold</th>
-                    <td id="gold">0</td>
-                </tr>
                 <!-- Add more stats as needed -->
             </table>
         </div>
@@ -249,14 +219,6 @@
             <button onclick="learnSkills()">Learn Skills</button>
             <button onclick="exploreCity()">Explore City</button>
         </div>
-        <div class="skill-tree" id="skillTree" style="display:none;">
-            <strong>Skill Tree:</strong>
-            <ul id="skillList">
-                <li><button onclick="learnSkill('Fireball')" id="fireballSkill">Learn Fireball (Level 5)</button></li>
-                <li><button onclick="learnSkill('Heal')" id="healSkill" disabled>Learn Heal (Level 10)</button></li>
-                <!-- Add more skills with appropriate levels and functionality -->
-            </ul>
-        </div>
         <div class="magic-menu" id="magicMenu">
             <strong>Magic:</strong><br>
             <button onclick="castSpell('Fire')">Fire Spell</button>
@@ -268,25 +230,27 @@
             <button onclick="useShield()">Use Shield</button>
             <!-- Add more defense buttons as needed -->
         </div>
-        <div class="settings-menu" id="settingsMenu">
-            <strong>Settings:</strong>
-            <div>
-                <label><input type="checkbox" id="soundCheckbox"> Sound</label>
-            </div>
-            <div>
-                <label>Text Size:
-                    <select id="textSizeSelect" onchange="changeTextSize()">
-                        <option value="normal">Normal</option>
-                        <option value="large">Large</option>
-                    </select>
-                </label>
-            </div>
-            <div>
-                <label><input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode()"> Dark Mode</label>
-            </div>
-        </div>
         <div class="save-button">
             <button onclick="saveGame()">Save Game</button>
+        </div>
+    </div>
+
+    <!-- Settings Menu -->
+    <div class="settings-menu" id="settingsMenu">
+        <strong>Settings:</strong>
+        <div>
+            <label><input type="checkbox" id="soundCheckbox"> Sound</label>
+        </div>
+        <div>
+            <label>Text Size:
+                <select id="textSizeSelect" onchange="changeTextSize()">
+                    <option value="normal">Normal</option>
+                    <option value="large">Large</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label><input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode()"> Dark Mode</label>
         </div>
     </div>
 
@@ -298,12 +262,11 @@
             strength: 10,
             magic: 5,
             defense: 5,
-            gold: 0,
-            level: 1,
             area: 1,  // Player starts in Area 1
             city: false,  // Not in city initially
-            skills: [],
-            inventory: []
+            level: 1,
+            traits: [],
+            currentTrait: 0 // Index of current active trait
         };
 
         var areas = [
@@ -315,108 +278,125 @@
             // Add more areas as needed
         ];
 
-        function updateGameText(text) {
-            var gameText = document.getElementById("gameText");
-            gameText.textContent += text + "\n";
+        var traits = [
+            { name: "Trait 1", rarity: "common", buff: 5 },
+            { name: "Trait 2", rarity: "rare", buff: 10 },
+            { name: "Trait 3", rarity: "legendary", buff: 20, hexChance: 10 }
+            // Add more traits with their buffs and rarity
+        ];
+
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
         }
 
+        // Function to toggle settings menu visibility
+        function toggleSettings() {
+            var settingsMenu = document.getElementById('settingsMenu');
+            settingsMenu.style.display = (settingsMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Function to change area
+        function changeArea() {
+            var areaSelect = document.getElementById('areaSelect');
+            var selectedAreaId = parseInt(areaSelect.value);
+            player.area = selectedAreaId;
+            // Update game text
+            var areaName = areas.find(area => area.id === selectedAreaId).name;
+            updateGameText(`You move to ${areaName}.`);
+        }
+
+        // Function to update game text dynamically
+        function updateGameText(text) {
+            var gameText = document.getElementById('gameText');
+            gameText.textContent = text;
+        }
+
+        // Function to initialize player traits at the start of the game
+        function initializeTraits() {
+            for (let i = 0; i < 5; i++) { // Roll traits initially
+                let randomTrait = traits[Math.floor(Math.random() * traits.length)];
+                player.traits.push(randomTrait);
+            }
+        }
+
+        // Function to swap traits every 5 levels
+        function swapTrait() {
+            let randomTrait = traits[Math.floor(Math.random() * traits.length)];
+            player.traits[player.currentTrait] = randomTrait;
+            updateGameText(`You swap your trait to ${randomTrait.name}.`);
+        }
+
+        // Example of calling initializeTraits() at game start
+        initializeTraits();
+
+        // Initial game text
+        updateGameText("Welcome to the Text RPG! Begin your adventure...");
+
+        // Functions for game actions
         function explore() {
-            updateGameText("You explore the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...");
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You explore the area${traitText}`);
         }
 
         function startFight() {
-            updateGameText("You prepare for a fight in the " + areas[player.area - 1].name + " (Recommended Level: " + areas[player.area - 1].recommendedLevel + ")...");
-        }
-
-        function changeArea() {
-            var areaSelect = document.getElementById("areaSelect");
-            var selectedAreaId = parseInt(areaSelect.value);
-            player.area = selectedAreaId;
-            updateGameText("Moved to " + areas[player.area - 1].name + ".");
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You start a fight${traitText}`);
         }
 
         function enterCity() {
-            var cityMenu = document.getElementById("cityMenu");
-            var cityOptions = document.getElementById("cityOptions");
-
-            if (!player.city) {
-                cityMenu.style.display = "block";
-                cityOptions.style.display = "block";
-                player.city = true;
-                updateGameText("You enter the City of Eldoria.");
-            } else {
-                cityMenu.style.display = "none";
-                cityOptions.style.display = "none";
-                player.city = false;
-                updateGameText("You leave the City of Eldoria.");
-            }
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You enter the city${traitText}`);
+            player.city = true;
+            // Show city options
+            var cityMenu = document.getElementById('cityMenu');
+            var cityOptions = document.getElementById('cityOptions');
+            cityMenu.style.display = 'block';
+            cityOptions.style.display = 'block';
         }
 
         function sellLoot() {
-            updateGameText("You sell your loot in the city.");
-            // Example: Increase gold and update inventory
-            player.gold += 50; // Example value, adjust as needed
-            updateStats();
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You sell your loot${traitText}`);
         }
 
         function buyItems() {
-            updateGameText("You buy items in the city.");
-            // Example: Decrease gold and update inventory
-            player.gold -= 20; // Example value, adjust as needed
-            player.inventory.push("Potion"); // Example item, adjust as needed
-            updateStats();
-            updateInventory();
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You buy items${traitText}`);
         }
 
         function learnSkills() {
-            var skillTree = document.getElementById("skillTree");
-            skillTree.style.display = "block";
-            updateGameText("You have reached level " + player.level + ". Choose a skill to learn.");
-        }
-
-        function learnSkill(skill) {
-            switch (skill) {
-                case 'Fireball':
-                    if (player.level >= 5 && !player.skills.includes('Fireball')) {
-                        player.skills.push('Fireball');
-                        document.getElementById('fireballSkill').disabled = true;
-                        updateGameText("You have learned the Fireball spell!");
-                    }
-                    break;
-                case 'Heal':
-                    if (player.level >= 10 && !player.skills.includes('Heal')) {
-                        player.skills.push('Heal');
-                        document.getElementById('healSkill').disabled = true;
-                        updateGameText("You have learned the Heal spell!");
-                    }
-                    break;
-                // Add more skills and conditions as needed
-            }
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You learn new skills${traitText}`);
         }
 
         function exploreCity() {
-            updateGameText("You explore the streets of the city.");
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You explore the city${traitText}`);
         }
 
         function castSpell(spell) {
-            if (player.skills.includes(spell)) {
-                updateGameText("You cast the " + spell + " spell.");
-                // Example: Modify player stats or game state based on spell
-            } else {
-                updateGameText("You don't know how to cast " + spell + " yet.");
-            }
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You cast ${spell} spell${traitText}`);
         }
 
         function useShield() {
-            // Example: Implement shield usage
-            updateGameText("You use your shield to defend.");
-            // Modify player stats or game state based on shield usage
+            var traitText = (player.traits.length > 0) ? ` with ${player.traits[player.currentTrait].name} trait.` : ".";
+            updateGameText(`You use your shield${traitText}`);
         }
 
+        // Function to save game state (not implemented in this example)
         function saveGame() {
             alert("Game saved!");
         }
 
+        // Function to change text size (not implemented in this example)
+        function changeTextSize() {
+            var textSizeSelect = document.getElementById('textSizeSelect');
+            var selectedTextSize = textSizeSelect.value;
+            // Implement change text size functionality here
+        }
         function toggleSettings() {
             var settingsMenu = document.getElementById("settingsMenu");
             settingsMenu.style.display = (settingsMenu.style.display === "block") ? "none" : "block";
