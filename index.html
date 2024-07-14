@@ -16,10 +16,11 @@
             background-color: #333;
             color: #fff;
             padding: 10px 0;
+            display: flex;
+            justify-content: space-between; /* Align items to the edges */
+            align-items: center; /* Center items vertically */
         }
         nav {
-            display: flex;
-            justify-content: center;
             background-color: #444;
             padding: 10px 0;
         }
@@ -37,18 +38,28 @@
         #output {
             margin-top: 20px;
         }
+        .home-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Number Guessing Game</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
     </header>
-
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
 
     <main>
         <h2>Welcome to the Number Guessing Game!</h2>
@@ -62,6 +73,9 @@
 
         <div id="output"></div>
     </main>
+
+    <!-- Home page button -->
+    <a href="#" class="home-button">Play Guessing Game</a>
 
     <script>
         document.getElementById('guessForm').addEventListener('submit', function(event) {
@@ -93,6 +107,13 @@
             }
 
             outputDiv.textContent = `Congratulations! You've guessed the number ${numberToGuess} correctly in ${attempts} attempts.`;
+        });
+
+        // Link to the guessing game button functionality (replace "#" with actual game link)
+        document.querySelector('.home-button').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            // Replace "#" with the actual link to your number guessing game
+            window.location.href = "#"; // Replace with your game URL
         });
     </script>
 </body>
