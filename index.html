@@ -45,10 +45,7 @@
             border: 1px solid #ccc;
             border-top: none;
             margin-top: 0;
-            left: 0;
-            right: 0;
-            margin-left: auto;
-            margin-right: auto;
+            left: calc(50% - 15%); /* Centering the suggestions */
             display: none;
         }
         .suggestions li {
@@ -89,6 +86,31 @@
             text-decoration: underline;
         }
     </style>
+</head>
+<body>
+    <!-- Header with Search Bar -->
+    <header>
+        <h1>Game Hub</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="showSuggestions()">
+            <button onclick="searchGames()">Search</button>
+            <ul id="suggestions" class="suggestions"></ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div>
+        <h2>Welcome to Game Hub!</h2>
+        <p>Explore and play exciting games.</p>
+        <a href="about.html">About Game Hub</a>
+    </div>
+
+    <!-- Search Results Container -->
+    <div id="searchResults" class="search-results" style="display: none;">
+        <!-- Results will be dynamically added here -->
+    </div>
+
+    <!-- JavaScript for Search Functionality -->
     <script>
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
@@ -157,28 +179,6 @@
             }
         }
     </script>
-</head>
-<body>
-    <!-- Header with Search Bar -->
-    <header>
-        <h1>Game Hub</h1>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="showSuggestions()">
-            <button onclick="searchGames()">Search</button>
-            <ul id="suggestions" class="suggestions"></ul>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <div>
-        <h2>Welcome to Game Hub!</h2>
-        <p>Explore and play exciting games.</p>
-    </div>
-
-    <!-- Search Results Container -->
-    <div id="searchResults" class="search-results" style="display: none;">
-        <!-- Results will be dynamically added here -->
-    </div>
 
 </body>
 </html>
