@@ -1,50 +1,65 @@
-<!doctype html>
-<html>
-  <head>
-    <title>This is the title of the webpage!</title>
-  </head>
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        /* Optional: Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
     <h1>Welcome to the Number Guessing Game!</h1>
     <p>I'm thinking of a number between 1 and 100.</p>
 
+    <form id="guessForm">
+        <label for="guess">Enter your guess:</label>
+        <input type="number" id="guess" min="1" max="100" required>
+        <button type="submit">Guess</button>
+    </form>
+
+    <div id="output"></div>
+
     <script>
-      // JavaScript for basic interaction, if needed
-      // (though your example doesn't require client-side scripting)
-    </script>
+        document.getElementById('guessForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
 
-    <p>To play the game, run the Python script below:</p>
-    <pre>
-import random
+            var guessInput = document.getElementById('guess');
+            var guess = parseInt(guessInput.value);
+            var outputDiv = document.getElementById('output');
 
-def main():
-    # Generate a random number between 1 and 100
-    number_to_guess = random.randint(1, 100)
-    attempts = 0
-    guessed_correctly = False
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                outputDiv.textContent = "Please enter a valid number between 1 and 100.";
+                return;
+            }
 
-    # Game loop
-    while not guessed_correctly:
-        try:
-            # Get the player's guess
-            guess = int(input("Make a guess: "))
-            attempts += 1
+            var numberToGuess = Math.floor(Math.random() * 100) + 1;
+            var attempts = 1;
 
-            # Check if the guess is correct
-            if guess < number_to_guess:
-                print("Too low.")
-            elif guess > number_to_guess:
-                print("Too high.")
-            else:
-                guessed_correctly = True
-                print(f"Congratulations! You've guessed the number {number_to_guess} correctly.")
-                print(f"It took you {attempts} attempts.")
-        except ValueError:
-            print("Please enter a valid number.")
+            while (guess !== numberToGuess) {
+                if (guess < numberToGuess) {
+                    outputDiv.textContent = "Too low. Try again.";
+                } else {
+                    outputDiv.textContent = "Too high. Try again.";
+                }
 
-if __name__ == "__main__":
-    main()
-    </pre>
+                guess = parseInt(prompt("Make a guess:"));
 
-    <p>Note: This script runs on the server or locally in a Python environment and does not execute directly within the browser.</p>
-  </body>
-</html>
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    outputDiv.textContent = "Please enter a valid number between 1 and 100.";
+                    return;
+            }
+
+            attempts++;
+            }
+            correctly.textContent took
