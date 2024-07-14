@@ -3,125 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hub - Text Adventure Game</title>
+    <title>Text Adventure Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #444;
-            color: #fff;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 999;
-        }
-        .search-container {
-            text-align: center;
-            margin-top: 50px; /* Adjust margin top if needed */
-        }
-        .search-container input[type=text] {
-            padding: 10px;
-            width: 30%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .search-container button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 10px;
-        }
-        .search-container button:hover {
-            background-color: #45a049;
-        }
-        .content {
-            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
             padding: 20px;
-            text-align: center;
+            background-color: #f0f0f0;
         }
-        .game-content {
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
             padding: 20px;
-            text-align: left;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .choice-button {
-            margin-top: 10px;
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .game-text {
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-container button {
             padding: 10px 20px;
+            font-size: 16px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
         }
-        .choice-button:hover {
+        .button-container button:hover {
             background-color: #0056b3;
+        }
+        .inventory {
+            margin-top: 30px;
+        }
+        .settings {
+            margin-top: 30px;
+        }
+        .settings label {
+            display: block;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <!-- Header with Search Bar -->
-    <header>
-        <h1>Game Hub - Text Adventure Game</h1>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
+    <div class="game-container">
+        <div class="game-title">Text Adventure Game</div>
+        <div class="game-text" id="gameText">
+            <!-- Game text dynamically updated here -->
+            Welcome to the Text Adventure Game! Choose your path...
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <div class="content">
-        <h2>Welcome to the Text Adventure Game!</h2>
-        <div class="game-content" id="gameContent">
-            <!-- Game starts here -->
-            <p>You wake up in a mysterious forest. A path leads deeper into the woods. What do you do?</p>
-            <button class="choice-button" onclick="goPath()">Follow the path</button>
+        <div class="button-container">
+            <button onclick="chooseOption(1)">Option 1</button>
+            <button onclick="chooseOption(2)">Option 2</button>
+            <!-- Add more buttons for additional choices -->
+        </div>
+        <div class="inventory" id="inventory">
+            <strong>Inventory:</strong>
+            <ul id="inventoryList">
+                <!-- Inventory items dynamically updated here -->
+                <li>No items</li>
+            </ul>
+        </div>
+        <div class="settings" id="settings">
+            <strong>Settings:</strong>
+            <div>
+                <label><input type="checkbox" id="soundCheckbox"> Sound</label>
+            </div>
+            <div>
+                <label>Text Size:
+                    <select id="textSizeSelect" onchange="changeTextSize()">
+                        <option value="normal">Normal</option>
+                        <option value="large">Large</option>
+                    </select>
+                </label>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript for Search Functionality and Game Logic -->
     <script>
-        function searchGames() {
-            var input = document.getElementById("searchInput").value.toLowerCase();
-            if (input === "text adventure") {
-                window.location.href = "game.html"; // Redirect to game.html
-            } else if (input === "guessing game") {
-                window.location.href = "guessing.html"; // Redirect to guessing.html
+        function chooseOption(option) {
+            var gameText = document.getElementById("gameText");
+            var inventoryList = document.getElementById("inventoryList");
+
+            switch (option) {
+                case 1:
+                    gameText.textContent = "You chose Option 1. Exploring...";
+                    break;
+                case 2:
+                    gameText.textContent = "You chose Option 2. Fighting...";
+                    break;
+                // Add more cases for additional options
+                default:
+                    break;
             }
-            // Add more conditions for other games as needed
+
+            // Update inventory
+            var newItem = document.createElement("li");
+            newItem.textContent = "New Item";
+            inventoryList.appendChild(newItem);
         }
 
-        function goPath() {
-            var gameContent = document.getElementById("gameContent");
+        function changeTextSize() {
+            var textSize = document.getElementById("textSizeSelect").value;
+            var gameText = document.getElementById("gameText");
 
-            // Update game content based on player's choice
-            gameContent.innerHTML = "<p>You follow the path and encounter a friendly dwarf.</p>" +
-                                    "<button class='choice-button' onclick='talkDwarf()'>Talk to the dwarf</button>";
-        }
-
-        function talkDwarf() {
-            var gameContent = document.getElementById("gameContent");
-
-            // Update game content based on player's choice
-            gameContent.innerHTML = "<p>The dwarf tells you about a hidden treasure nearby.</p>" +
-                                    "<button class='choice-button' onclick='findTreasure()'>Search for the treasure</button>";
-        }
-
-        function findTreasure() {
-            var gameContent = document.getElementById("gameContent");
-
-            // Update game content based on player's choice
-            gameContent.innerHTML = "<p>You find the treasure chest! Congratulations!</p>";
+            switch (textSize) {
+                case "normal":
+                    gameText.style.fontSize = "16px";
+                    break;
+                case "large":
+                    gameText.style.fontSize = "20px";
+                    break;
+                // Add more cases for additional text sizes
+                default:
+                    break;
+            }
         }
     </script>
-
 </body>
 </html>
