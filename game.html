@@ -10,6 +10,7 @@
             margin: 0;
             padding: 20px;
             background-color: #f0f0f0;
+            color: #333;
         }
         .game-container {
             max-width: 800px;
@@ -18,7 +19,6 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            transition: background-color 0.3s ease;
         }
         .game-title {
             font-size: 24px;
@@ -48,6 +48,13 @@
         .inventory {
             margin-top: 30px;
         }
+        .inventory ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .inventory li {
+            margin-bottom: 10px;
+        }
         .stats {
             margin-top: 30px;
         }
@@ -62,50 +69,63 @@
             border-bottom: 1px solid #ddd;
         }
         .settings-button {
-            margin-top: 30px;
+            margin-top: 20px;
         }
         .areas-menu {
+            margin-top: 30px;
+        }
+        .areas-menu select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .city-menu {
+            margin-top: 30px;
+        }
+        .city-menu select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .city-options {
             margin-top: 20px;
         }
-        .save-button {
-            margin-top: 20px;
+        .magic-menu {
+            margin-top: 30px;
         }
-        .settings-menu {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .settings-menu label {
-            display: block;
+        .magic-menu button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
             margin-bottom: 10px;
+            cursor: pointer;
         }
-        .dark-mode {
-            margin-top: 20px;
+        .magic-menu button:hover {
+            background-color: #495057;
         }
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #333;
-            color: #fff;
+        .defense-menu {
+            margin-top: 30px;
         }
-        .game-container.dark-mode {
-            background-color: #444;
-            color: #fff;
-            border-color: #666;
+        .defense-menu button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
-        .settings-menu.dark-mode {
-            background-color: #555;
-            color: #fff;
-            border-color: #777;
+        .defense-menu button:hover {
+            background-color: #495057;
         }
     </style>
 </head>
 <body>
-    <div class="game-container" id="gameContainer">
+    <div class="game-container">
         <div class="game-title">Text RPG</div>
         <div class="game-text" id="gameText">
             <!-- Game text dynamically updated here -->
@@ -114,6 +134,7 @@
         <div class="button-container">
             <button onclick="explore()">Explore</button>
             <button onclick="startFight()">Fight</button>
+            <button onclick="enterCity()">Enter City</button>
             <!-- Add more buttons for additional actions -->
         </div>
         <div class="inventory" id="inventory">
@@ -134,6 +155,14 @@
                     <th>Strength</th>
                     <td id="strength">10</td>
                 </tr>
+                <tr>
+                    <th>Magic</th>
+                    <td id="magic">5</td>
+                </tr>
+                <tr>
+                    <th>Defense</th>
+                    <td id="defense">5</td>
+                </tr>
                 <!-- Add more stats as needed -->
             </table>
         </div>
@@ -150,6 +179,30 @@
                 <option value="5">Area 5 - Swamp (Level 40-50)</option>
                 <!-- Add more areas as needed -->
             </select>
+        </div>
+        <div class="city-menu" id="cityMenu" style="display:none;">
+            <strong>City:</strong>
+            <select id="citySelect" onchange="enterCity()">
+                <option value="1">City of Eldoria</option>
+                <!-- Add more cities as needed -->
+            </select>
+        </div>
+        <div class="city-options" id="cityOptions" style="display:none;">
+            <button onclick="sellLoot()">Sell Loot</button>
+            <button onclick="buyItems()">Buy Items</button>
+            <button onclick="learnSkills()">Learn Skills</button>
+            <button onclick="exploreCity()">Explore City</button>
+        </div>
+        <div class="magic-menu" id="magicMenu">
+            <strong>Magic:</strong><br>
+            <button onclick="castSpell('Fire')">Fire Spell</button>
+            <button onclick="castSpell('Ice')">Ice Spell</button>
+            <!-- Add more magic buttons as needed -->
+        </div>
+        <div class="defense-menu" id="defenseMenu">
+            <strong>Defense:</strong><br>
+            <button onclick="useShield()">Use Shield</button>
+            <!-- Add more defense buttons as needed -->
         </div>
         <div class="save-button">
             <button onclick="saveGame()">Save Game</button>
@@ -170,7 +223,7 @@
                 </select>
             </label>
         </div>
-        <div class="dark-mode">
+        <div>
             <label><input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode()"> Dark Mode</label>
         </div>
     </div>
@@ -181,7 +234,10 @@
             name: "Player",
             health: 100,
             strength: 10,
-            area: 1  // Player starts in Area 1
+            magic: 5,
+            defense: 5,
+            area: 1,  // Player starts in Area 1
+            city: false  // Not in city initially
         };
 
         var areas = [
@@ -189,47 +245,9 @@
             { id: 2, name: "Mountains", recommendedLevel: "10-20" },
             { id: 3, name: "Caves", recommendedLevel: "20-30" },
             { id: 4, name: "Desert", recommendedLevel: "30-40" },
-            { id: 5, name: "Swamp", recommendedLevel: "40-50" }
+            { id: 5, name: "Swamp", recommendedLevel: "40-50" },
             // Add more areas as needed
         ];
-
-        // Load settings from localStorage if available
-        var settings = {
-            sound: true,
-            textSize: "normal",
-            darkMode: false
-        };
-
-        loadSettings();
-
-        function loadSettings() {
-            if (localStorage.getItem("settings")) {
-                settings = JSON.parse(localStorage.getItem("settings"));
-                applySettings();
-            }
-        }
-
-        function applySettings() {
-            var darkModeCheckbox = document.getElementById("darkModeCheckbox");
-            var gameContainer = document.getElementById("gameContainer");
-
-            darkModeCheckbox.checked = settings.darkMode;
-            if (settings.darkMode) {
-                gameContainer.classList.add("dark-mode");
-            } else {
-                gameContainer.classList.remove("dark-mode");
-            }
-        }
-
-        function saveSettings() {
-            localStorage.setItem("settings", JSON.stringify(settings));
-        }
-
-        function toggleDarkMode() {
-            settings.darkMode = !settings.darkMode;
-            applySettings();
-            saveSettings();
-        }
 
         function explore() {
             var gameText = document.getElementById("gameText");
@@ -247,9 +265,58 @@
             var areaSelect = document.getElementById("areaSelect");
             var selectedAreaId = parseInt(areaSelect.value);
             player.area = selectedAreaId;
-            // Update game text or perform other actions when changing areas
             var gameText = document.getElementById("gameText");
             gameText.textContent = "Moved to " + areas[player.area - 1].name + ".\n";
+        }
+
+        function enterCity() {
+            var cityMenu = document.getElementById("cityMenu");
+            var cityOptions = document.getElementById("cityOptions");
+            var citySelect = document.getElementById("citySelect");
+
+            if (!player.city) {
+                cityMenu.style.display = "block";
+                cityOptions.style.display = "block";
+                player.city = true;
+                var gameText = document.getElementById("gameText");
+                gameText.textContent = "You enter the City of Eldoria.\n";
+            } else {
+                cityMenu.style.display = "none";
+                cityOptions.style.display = "none";
+                player.city = false;
+                var gameText = document.getElementById("gameText");
+                gameText.textContent = "You leave the City of Eldoria.\n";
+            }
+        }
+
+        function sellLoot() {
+            // Placeholder function for selling loot
+            updateGameText("You sell your loot in the city.\n");
+        }
+
+        function buyItems() {
+            // Placeholder function for buying items
+            updateGameText("You buy items in the city.\n");
+        }
+
+        function learnSkills() {
+            // Placeholder function for learning skills
+            updateGameText("You learn new skills in the city.\n");
+        }
+
+        function exploreCity() {
+            // Placeholder function for exploring the city
+            updateGameText("You explore the streets of the city.\n");
+        }
+
+        function castSpell(spell) {
+            // Placeholder function for casting spells
+            updateGameText("You cast the " + spell + " spell.\n");
+        }
+
+        function useShield() {
+            // Placeholder function for using shield
+            updateGameText("You use your shield to defend.\n");
         }
 
         function saveGame() {
@@ -257,7 +324,6 @@
             alert("Game saved!");
         }
 
-        // Function to toggle settings menu visibility
         function toggleSettings() {
             var settingsMenu = document.getElementById("settingsMenu");
             if (settingsMenu.style.display === "block") {
@@ -265,6 +331,11 @@
             } else {
                 settingsMenu.style.display = "block";
             }
+        }
+
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
         }
 
         function changeTextSize() {
@@ -278,23 +349,13 @@
                 case "large":
                     gameText.style.fontSize = "20px";
                     break;
-                // Add more cases for additional text sizes
                 default:
                     break;
             }
-
-            // Update settings and save
-            settings.textSize = textSize;
-            saveSettings();
         }
 
-        // Initialize the game with saved settings
-        applySettings();
-
-        // Event listener for window.onload to ensure settings are applied on page load
-        window.onload = function() {
-            applySettings();
-        };
+        // Initialize the game
+        updateGameText("Welcome to the Text RPG! Begin your adventure...");
     </script>
 </body>
 </html>
