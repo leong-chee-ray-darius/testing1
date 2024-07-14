@@ -9,6 +9,27 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #444;
+            padding: 10px 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
         }
         form {
             margin-top: 20px;
@@ -19,16 +40,28 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to the Number Guessing Game!</h1>
-    <p>I'm thinking of a number between 1 and 100.</p>
+    <header>
+        <h1>Number Guessing Game</h1>
+    </header>
 
-    <form id="guessForm">
-        <label for="guess">Enter your guess:</label>
-        <input type="number" id="guess" min="1" max="100" required>
-        <button type="submit">Guess</button>
-    </form>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
 
-    <div id="output"></div>
+    <main>
+        <h2>Welcome to the Number Guessing Game!</h2>
+        <p>I'm thinking of a number between 1 and 100.</p>
+
+        <form id="guessForm">
+            <label for="guess">Enter your guess:</label>
+            <input type="number" id="guess" min="1" max="100" required>
+            <button type="submit">Guess</button>
+        </form>
+
+        <div id="output"></div>
+    </main>
 
     <script>
         document.getElementById('guessForm').addEventListener('submit', function(event) {
