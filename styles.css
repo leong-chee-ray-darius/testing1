@@ -16,6 +16,7 @@ body, html {
 }
 
 /* Dark mode styles */
+/* Dark mode styles */
 .dark-mode body {
     background-color: #201c1c; /* Dark background color for the entire page */
 }
@@ -24,6 +25,11 @@ body, html {
     background-color: #201c1c; /* Dark background color */
     color: #aeb2b5; /* Light text color */
     border-color: #333; /* Dark border color */
+}
+
+/* Dark mode styles for progress bars */
+.dark-mode .progress {
+    background-color: #333; /* Darker progress bar color */
 }
 
 /* Button styles */
