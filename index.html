@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hub - Text Adventure Game</title>
+    <title>Game Hub</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,7 +71,7 @@
 <body>
     <!-- Header with Search Bar -->
     <header>
-        <h1>Game Hub - Text Adventure Game</h1>
+        <h1>Game Hub</h1>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
         </div>
@@ -79,15 +79,11 @@
 
     <!-- Main Content -->
     <div class="content">
-        <h2>Welcome to the Text Adventure Game!</h2>
-        <div class="game-content" id="gameContent">
-            <!-- Game starts here -->
-            <p>You wake up in a mysterious forest. A path leads deeper into the woods. What do you do?</p>
-            <button class="choice-button" onclick="goPath()">Follow the path</button>
-        </div>
+        <h2>Welcome to Game Hub!</h2>
+        <p>Explore and play exciting games.</p>
     </div>
 
-    <!-- JavaScript for Search Functionality and Game Logic -->
+    <!-- JavaScript for Search Functionality and Navigation -->
     <script>
         function searchGames() {
             var input = document.getElementById("searchInput").value.toLowerCase();
@@ -97,29 +93,6 @@
                 window.location.href = "guessing.html"; // Redirect to guessing.html
             }
             // Add more conditions for other games as needed
-        }
-
-        function goPath() {
-            var gameContent = document.getElementById("gameContent");
-
-            // Update game content based on player's choice
-            gameContent.innerHTML = "<p>You follow the path and encounter a friendly dwarf.</p>" +
-                                    "<button class='choice-button' onclick='talkDwarf()'>Talk to the dwarf</button>";
-        }
-
-        function talkDwarf() {
-            var gameContent = document.getElementById("gameContent");
-
-            // Update game content based on player's choice
-            gameContent.innerHTML = "<p>The dwarf tells you about a hidden treasure nearby.</p>" +
-                                    "<button class='choice-button' onclick='findTreasure()'>Search for the treasure</button>";
-        }
-
-        function findTreasure() {
-            var gameContent = document.getElementById("gameContent");
-
-            // Update game content based on player's choice
-            gameContent.innerHTML = "<p>You find the treasure chest! Congratulations!</p>";
         }
     </script>
 
