@@ -26,7 +26,6 @@
         }
         .game-text {
             margin-bottom: 20px;
-            white-space: pre-wrap; /* Ensure newline characters (\n) are respected */
         }
         .button-container {
             display: flex;
@@ -61,10 +60,17 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        .settings {
-            margin-top: 30px;
+        .settings-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: none; /* Initially hidden */
         }
-        .settings label {
+        .settings-menu label {
             display: block;
             margin-bottom: 10px;
         }
@@ -103,24 +109,29 @@
                 <!-- Add more stats as needed -->
             </table>
         </div>
-        <div class="settings" id="settings">
-            <strong>Settings:</strong>
-            <div>
-                <label><input type="checkbox" id="soundCheckbox"> Sound</label>
-            </div>
-            <div>
-                <label>Text Size:
-                    <select id="textSizeSelect" onchange="changeTextSize()">
-                        <option value="normal">Normal</option>
-                        <option value="large">Large</option>
-                    </select>
-                </label>
-            </div>
+        <div class="settings-button">
+            <button onclick="toggleSettings()">Settings</button>
+        </div>
+    </div>
+
+    <!-- Settings Menu -->
+    <div class="settings-menu" id="settingsMenu">
+        <strong>Settings:</strong>
+        <div>
+            <label><input type="checkbox" id="soundCheckbox"> Sound</label>
+        </div>
+        <div>
+            <label>Text Size:
+                <select id="textSizeSelect" onchange="changeTextSize()">
+                    <option value="normal">Normal</option>
+                    <option value="large">Large</option>
+                </select>
+            </label>
         </div>
     </div>
 
     <script>
-        // Initial game state
+        // Define player object with initial stats
         var player = {
             name: "Player",
             health: 100,
@@ -128,139 +139,112 @@
             inventory: []
         };
 
-        // Define areas with their respective enemies, bosses, and secret boss
-        var areas = {
-            "Forest": {
+        // Define areas with associated enemies
+        var areas = [
+            {
+                name: "Weakest Area",
                 enemies: [
                     { name: "Goblin", level: 1, health: 30, strength: 5, drops: ["Gold", "Health Potion"] },
                     { name: "Orc", level: 2, health: 50, strength: 8, drops: ["Gold", "Armor"] },
-                    // Add more enemies for the Forest area
-                ],
-                bosses: [
-                    { name: "Forest Guardian", level: 10, health: 150, strength: 20, drops: ["Forest Key"] }
-                    // Add more bosses for the Forest area
-                ],
-                secretBoss: { name: "Ancient Treant", level: 15, health: 200, strength: 25, drops: ["Ancient Relic"] }
+                    // Add more enemies as needed for the weakest area
+                ]
             },
-            "Cave": {
+            {
+                name: "Medium Area",
                 enemies: [
+                    { name: "Dragon", level: 5, health: 100, strength: 15, drops: ["Gold", "Dragon Scale"] },
                     { name: "Skeleton", level: 6, health: 35, strength: 6, drops: ["Gold", "Bone"] },
-                    { name: "Bat", level: 4, health: 20, strength: 4, drops: ["Gold", "Wing"] },
-                    // Add more enemies for the Cave area
-                ],
-                bosses: [
-                    { name: "Cave Troll", level: 12, health: 180, strength: 18, drops: ["Cave Key"] }
-                    // Add more bosses for the Cave area
-                ],
-                secretBoss: { name: "Dark Dragon", level: 20, health: 300, strength: 30, drops: ["Dark Gem"] }
+                    // Add more enemies as needed for the medium area
+                ]
             },
-            // Define more areas with enemies, bosses, and secret bosses
-        };
+            // Add more areas with enemies
+        ];
 
-        var currentArea = "Forest";
-        var currentEnemy;
+        // Define bosses and secret boss
+        var bosses = [
+            { name: "Boss 1", level: 20, health: 200, strength: 20, drops: ["Gold", "Boss Sword"] },
+            { name: "Boss 2", level: 30, health: 300, strength: 30, drops: ["Gold", "Boss Armor"] },
+            // Add more bosses as needed
+        ];
 
+        var secretBoss = { name: "Secret Boss", level: 50, health: 500, strength: 50, drops: ["Gold", "Ultimate Item"] };
+
+        // Determine starting area (weakest area)
+        var startingArea = areas[0];
+
+        // Initialize game text element
+        var gameText = document.getElementById("gameText");
+
+        // Initialize inventory and stats elements
+        var inventoryList = document.getElementById("inventoryList");
+        var healthStat = document.getElementById("health");
+        var strengthStat = document.getElementById("strength");
+
+        // Load saved game state if available
+        var savedGame = JSON.parse(localStorage.getItem("savedGame"));
+        if (savedGame) {
+            player = savedGame.player;
+            startingArea = savedGame.startingArea;
+            gameText.textContent = savedGame.gameText;
+            updateInventory(inventoryList);
+            updateStats();
+        } else {
+            gameText.textContent = "Welcome to the Text RPG! Begin your adventure...";
+        }
+
+        // Function to explore with multiple options
         function explore() {
-            var gameText = document.getElementById("gameText");
-            var inventoryList = document.getElementById("inventoryList");
+            var options = [
+                "Search for enemies",
+                "Find loot",
+                "Rest and recover"
+                // Add more options as needed
+            ];
 
-            gameText.textContent = "You explore the " + currentArea + "...\n";
+            var option = prompt("Choose an option to explore:\n\n" + options.join("\n"));
 
-            // Example of finding an item
-            var newItem = "Health Potion";
-            player.inventory.push(newItem);
+            switch (option) {
+                case "Search for enemies":
+                    startFight();
+                    break;
+                case "Find loot":
+                    findLoot();
+                    break;
+                case "Rest and recover":
+                    restAndRecover();
+                    break;
+                // Add cases for additional options
+                default:
+                    gameText.textContent = "You explore the area...";
+                    break;
+            }
+        }
+
+        // Function to start a fight with a random enemy from the starting area
+        function startFight() {
+            var enemy = getRandomEnemy();
+            gameText.textContent = "You encounter a " + enemy.name + " (Level " + enemy.level + ")!\n";
+            // Implement turn-based combat logic here
+        }
+
+        // Function to find loot
+        function findLoot() {
+            var loot = ["Gold", "Health Potion", "Armor", "Weapon"]; // Example loot items
+            var foundItem = loot[Math.floor(Math.random() * loot.length)];
+            gameText.textContent = "You found a " + foundItem + "!";
+            player.inventory.push(foundItem);
             updateInventory(inventoryList);
         }
 
-        function startFight() {
-            var gameText = document.getElementById("gameText");
-
-            // Randomly select an enemy from the current area
-            var enemiesInArea = areas[currentArea].enemies;
-            currentEnemy = enemiesInArea[Math.floor(Math.random() * enemiesInArea.length)];
-            gameText.textContent = "You encounter a " + currentEnemy.name + " (Level " + currentEnemy.level + ")!\n";
-
-            // Display fight options
-            showFightOptions();
-        }
-
-        function showFightOptions() {
-            var buttonContainer = document.getElementsByClassName("button-container")[0];
-            buttonContainer.innerHTML = "";
-
-            var fightOptions = ["Attack", "Use Item", "Run"];
-            fightOptions.forEach(function(option) {
-                var button = document.createElement("button");
-                button.textContent = option;
-                button.onclick = function() {
-                    handleFightOption(option);
-                };
-                buttonContainer.appendChild(button);
-            });
-        }
-
-        function handleFightOption(option) {
-            var gameText = document.getElementById("gameText");
-            var buttonContainer = document.getElementsByClassName("button-container")[0];
-
-            switch (option) {
-                case "Attack":
-                    var playerDamage = Math.floor(Math.random() * player.strength) + 1;
-                    currentEnemy.health -= playerDamage;
-                    gameText.textContent += "You attack the " + currentEnemy.name + " and deal " + playerDamage + " damage.\n";
-                    break;
-                case "Use Item":
-                    if (player.inventory.length > 0) {
-                        var randomItemIndex = Math.floor(Math.random() * player.inventory.length);
-                        var usedItem = player.inventory[randomItemIndex];
-                        gameText.textContent += "You use " + usedItem + ".\n";
-                        // Implement item effects here, for example:
-                        // player.health += 20; // Restore health
-                        player.inventory.splice(randomItemIndex, 1); // Remove used item from inventory
-                        updateInventory(document.getElementById("inventoryList"));
-                    } else {
-                        gameText.textContent += "You have no items to use!\n";
-                    }
-                    break;
-                case "Run":
-                    gameText.textContent += "You attempt to run away...\n";
-                    // Implement run logic here, potentially affecting combat outcome
-                    break;
-                default:
-                    break;
-            }
-
-            // Check enemy's health
-            if (currentEnemy.health <= 0) {
-                gameText.textContent += "You defeated the " + currentEnemy.name + "!\n";
-                // Gain drops from enemy
-                currentEnemy.drops.forEach(function(drop) {
-                    player.inventory.push(drop);
-                });
-                updateInventory(document.getElementById("inventoryList"));
-                // Reset button container after defeating enemy
-                setTimeout(function() {
-                    buttonContainer.innerHTML = '<button onclick="explore()">Explore</button><button onclick="startFight()">Fight</button>';
-                }, 2000); // Wait 2 seconds before resetting
-            } else {
-                // Enemy's turn
-                var enemyDamage = Math.floor(Math.random() * currentEnemy.strength) + 1;
-                player.health -= enemyDamage;
-                gameText.textContent += "The " + currentEnemy.name + " attacks you and deals " + enemyDamage + " damage.\n";
-
-                // Check player's health
-                if player.health <= 0) {
-                    gameText.textContent += "You were defeated by the " + currentEnemy.name + ". Game Over!";
-                    // Handle game over scenario
-                } else {
-                    // Redisplay fight options for next player turn
-                    showFightOptions();
-                }
-            }
-
+        // Function to rest and recover health
+        function restAndRecover() {
+            var recoveredHealth = Math.floor(Math.random() * 20) + 10; // Recover between 10 to 30 health points
+            player.health += recoveredHealth;
+            gameText.textContent = "You rest and recover " + recoveredHealth + " health points.";
             updateStats();
         }
 
+        // Function to update inventory list
         function updateInventory(listElement) {
             listElement.innerHTML = "";
             player.inventory.forEach(function(item) {
@@ -270,28 +254,108 @@
             });
         }
 
+        // Function to update player stats
         function updateStats() {
-            document.getElementById("health").textContent = player.health;
-            document.getElementById("strength").textContent = player.strength;
+            healthStat.textContent = player.health;
+            strengthStat.textContent = player.strength;
             // Add more stats as needed
         }
 
+        // Function to change text size
         function changeTextSize() {
             var textSize = document.getElementById("textSizeSelect").value;
-            var gameText = document.getElementById("gameText");
+            gameText.style.fontSize = textSize === "large" ? "20px" : "16px";
+        }
 
-            switch (textSize) {
-                case "normal":
-                    gameText.style.fontSize = "16px";
+        // Function to get a random enemy from the starting area
+        function getRandomEnemy() {
+            var randomIndex = Math.floor(Math.random() * startingArea.enemies.length);
+            return startingArea.enemies[randomIndex];
+        }
+
+        //
+        // Function to handle turn-based combat
+        function handleCombat(enemy) {
+            var combatText = "";
+
+            while (player.health > 0 && enemy.health > 0) {
+                // Player's turn
+                var playerDamage = Math.floor(Math.random() * player.strength) + 1;
+                enemy.health -= playerDamage;
+                combatText += "You deal " + playerDamage + " damage to the " + enemy.name + ".\n";
+
+                // Check if enemy is defeated
+                if (enemy.health <= 0) {
+                    combatText += "You defeated the " + enemy.name + "!\n";
                     break;
-                case "large":
-                    gameText.style.fontSize = "20px";
-                    break;
-                default:
-                    break;
+                }
+
+                // Enemy's turn
+                var enemyDamage = Math.floor(Math.random() * enemy.strength) + 1;
+                player.health -= enemyDamage;
+                combatText += "The " + enemy.name + " deals " + enemyDamage + " damage to you.\n";
+
+                // Update stats after each turn
+                updateStats();
+            }
+
+            // Check outcome of the fight
+            if (player.health <= 0) {
+                combatText += "You were defeated by the " + enemy.name + ". Game Over!";
+                // Handle game over scenario
+            }
+
+            gameText.textContent = combatText;
+        }
+
+        // Function to start a fight with a random enemy from the starting area
+        function startFight() {
+            var enemy = getRandomEnemy();
+            gameText.textContent = "You encounter a " + enemy.name + " (Level " + enemy.level + ")!\n";
+            handleCombat(enemy);
+        }
+
+        // Function to save game state
+        function saveGame() {
+            var savedGame = {
+                player: player,
+                startingArea: startingArea,
+                gameText: gameText.textContent
+            };
+
+            localStorage.setItem("savedGame", JSON.stringify(savedGame));
+            alert("Game saved successfully!");
+        }
+
+        // Function to load saved game state
+        function loadGame() {
+            var savedGame = JSON.parse(localStorage.getItem("savedGame"));
+            if (savedGame) {
+                player = savedGame.player;
+                startingArea = savedGame.startingArea;
+                gameText.textContent = savedGame.gameText;
+                updateInventory(inventoryList);
+                updateStats();
+                alert("Game loaded successfully!");
+            } else {
+                alert("No saved game found.");
             }
         }
+
+        // Event listeners for buttons
+        document.getElementById("saveButton").addEventListener("click", saveGame);
+        document.getElementById("loadButton").addEventListener("click", loadGame);
+        function toggleSettings() {
+            var settingsMenu = document.getElementById("settingsMenu");
+            if (settingsMenu.style.display === "block") {
+                settingsMenu.style.display = "none";
+            } else {
+                settingsMenu.style.display = "block";
+            }
+        }
+
+        // Initialize the game
+        updateStats();
     </script>
 </body>
 </html>
-
