@@ -1,32 +1,9 @@
-import random
-
-def main():
-    # Generate a random number between 1 and 100
-    number_to_guess = random.randint(1, 100)
-    attempts = 0
-    guessed_correctly = False
-
-    print("Welcome to the Number Guessing Game!")
-    print("I'm thinking of a number between 1 and 100.")
-
-    # Game loop
-    while not guessed_correctly:
-        try:
-            # Get the player's guess
-            guess = int(input("Make a guess: "))
-            attempts += 1
-
-            # Check if the guess is correct
-            if guess < number_to_guess:
-                print("Too low.")
-            elif guess > number_to_guess:
-                print("Too high.")
-            else:
-                guessed_correctly = True
-                print(f"Congratulations! You've guessed the number {number_to_guess} correctly.")
-                print(f"It took you {attempts} attempts.")
-        except ValueError:
-            print("Please enter a valid number.")
-
-if __name__ == "__main__":
-    main()
+<!doctype html>
+<html>
+  <head>
+    <title>This is the title of the webpage!</title>
+  </head>
+  <body>
+    <p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p>
+  </body>
+</html>
