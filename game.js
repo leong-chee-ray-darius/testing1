@@ -109,8 +109,7 @@ function toggleSettings() {
 
 // Example function for toggling dark mode
 function toggleDarkMode() {
-    var body = document.body;
-    body.classList.toggle("dark-mode");
+    document.body.classList.toggle('dark-mode');
 }
 
 // Example function for changing text size
