@@ -120,12 +120,20 @@
 
     <script>
         // Initial game state
+        // Define player and enemy objects
         var player = {
+            name: "Player",
             health: 100,
-            strength: 10,
-            inventory: []
+            strength: 10
         };
 
+        var enemy = {
+            name: "Enemy",
+            health: 80,
+            strength: 8
+        };
+
+        
         var enemies = [
     { name: "Goblin", level: 1, health: 30, strength: 5, drops: ["Gold", "Health Potion"] },
     { name: "Orc", level: 2, health: 50, strength: 8, drops: ["Gold", "Armor"] },
