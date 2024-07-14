@@ -7,12 +7,21 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #444;
+            color: #fff;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
         }
         .search-container {
-            position: relative;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-top: 50px; /* Adjust margin top if needed */
         }
         .search-container input[type=text] {
             padding: 10px;
@@ -38,14 +47,15 @@
         .suggestions {
             position: absolute;
             background-color: #f1f1f1;
-            z-index: 999;
+            z-index: 998;
             width: 30%;
             list-style-type: none;
             padding: 0;
             border: 1px solid #ccc;
             border-top: none;
             margin-top: 0;
-            left: calc(50% - 15%); /* Centering the suggestions */
+            left: 50%; /* Adjust left position if needed */
+            transform: translateX(-50%); /* Center horizontally */
             display: none;
         }
         .suggestions li {
@@ -73,17 +83,10 @@
         .search-results button:hover {
             background-color: #0056b3;
         }
-        nav {
-            background-color: #444;
-            padding: 10px 0;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        nav a:hover {
-            text-decoration: underline;
+        .content {
+            margin-top: 100px; /* Adjust margin top to prevent overlapping with fixed header */
+            padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -99,10 +102,9 @@
     </header>
 
     <!-- Main Content -->
-    <div>
+    <div class="content">
         <h2>Welcome to Game Hub!</h2>
         <p>Explore and play exciting games.</p>
-        <a href="about.html">About Game Hub</a>
     </div>
 
     <!-- Search Results Container -->
